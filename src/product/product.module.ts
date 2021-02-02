@@ -17,11 +17,11 @@ import { Product as ProductModel } from './product.model'
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       autoLoadModels: true,
-      synchronize: true,
+      synchronize: true
     }),
-    SequelizeModule.forFeature([ProductModel]),
+    SequelizeModule.forFeature([ProductModel])
   ],
   controllers: [ProductsController],
-  providers: [ProductService],
+  providers: [ProductService]
 })
 export class ProductModule {}

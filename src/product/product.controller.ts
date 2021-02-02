@@ -22,7 +22,9 @@ export class ProductsController {
   }
 
   @Put()
-  async alter(@Body() product: ProductModel): Promise<[number, ProductModel[]]> {
+  async alter(
+    @Body() product: ProductModel
+  ): Promise<[number, ProductModel[]]> {
     return this.productsService.alter(product)
   }
 

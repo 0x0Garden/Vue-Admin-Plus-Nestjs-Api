@@ -4,19 +4,19 @@ import { Column, DataType, Table, Model } from 'sequelize-typescript'
 export class Product extends Model<Product> {
   @Column({
     type: DataType.STRING(60),
-    allowNull: false,
+    allowNull: false
   })
   code: string
 
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: false
   })
   name: string
 
   @Column({
     type: DataType.DECIMAL(10, 2),
-    allowNull: false,
+    allowNull: false
   })
   price: number
 }

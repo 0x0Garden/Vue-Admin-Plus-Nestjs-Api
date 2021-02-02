@@ -6,7 +6,7 @@ import { Product as ProductModel } from './product.model'
 export class ProductService {
   constructor(
     @InjectModel(ProductModel)
-    private productModel: typeof ProductModel,
+    private productModel: typeof ProductModel
   ) {}
 
   async getAll(): Promise<ProductModel[]> {
@@ -24,8 +24,8 @@ export class ProductService {
   async alter(product: ProductModel): Promise<[number, ProductModel[]]> {
     return this.productModel.update(product, {
       where: {
-        id: product.id,
-      },
+        id: product.id
+      }
     })
   }
 
