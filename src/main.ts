@@ -1,10 +1,9 @@
+import './config/dotenv'
 import { NestFactory } from '@nestjs/core'
-import { ApplicationModule } from './app.module'
+import { AppModule } from './app.module'
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApplicationModule)
+  const app = await NestFactory.create(AppModule)
   await app.listen(3000)
 }
-bootstrap().then(() => {
-  console.log('启动成功！')
-})
+bootstrap().then()
