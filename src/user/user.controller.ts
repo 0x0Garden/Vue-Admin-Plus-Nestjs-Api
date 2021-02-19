@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common'
+import { Controller, Get, Post, Delete, Body, Param, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common'
 
 import { CreateUserDto } from './dto/create-user.dto'
 import { UserEntity } from './user.entity'
@@ -19,6 +19,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
   findOne(@Param('id') id: string): Promise<UserEntity> {
     return this.userService.findOne(id)
   }
