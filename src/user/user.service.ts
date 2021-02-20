@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { CreateUserDto } from './dto/create-user.dto'
+import { CreateUserDto } from './dto'
 import { UserEntity } from './user.entity'
 
 @Injectable()
@@ -25,8 +25,18 @@ export class UserService {
   findAll(): Promise<UserEntity[]> {
     return this.userRepository.find()
   }
-
-  findOne(id: string): Promise<UserEntity> {
+  /**
+   * 根据登录账号查询
+   * @param username
+   */
+  async findOne(username: string): Promise<UserEntity> {
+    return (await this.userRepository.findOne({ username })) || null
+  }
+  /**
+   * 根据编码查询
+   * @param id
+   */
+  findById(id: string): Promise<UserEntity> {
     return this.userRepository.findOne(id)
   }
 
