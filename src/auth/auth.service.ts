@@ -1,27 +1,56 @@
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 
-import { UserService } from '../user/user.service'
-import { LoginUserDto } from '../user/dto'
+import { UserService } from '@/user/user.service'
+import { UserEntity } from '@/user/user.entity'
+import { LoginUserDto } from '@/user/dto'
+import { JwtPayload } from '@/auth/dtos'
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
 
-  async validateUser({ username, password }: LoginUserDto) {
+  /**
+   * 验证用户
+   * @param username
+   * @param password
+   */
+  async validateUser({ username, password }: LoginUserDto): Promise<string> {
     const user = await this.userService.findOne(username)
     if (user && user.password === password) {
-      const payload = this.jwtService.sign({ username: user.username, sub: user.id })
-      const result = { ...user, ...{ token: payload } }
-      return {
-        status: 200,
-        msg: '返回用户信息',
-        data: result
+      const payload: JwtPayload = {
+        username: user.username,
+        role: user.role,
+        sub: user.id
       }
+      return this.jwtService.sign(payload)
+      // return user
     }
-    return {
-      status: 200,
-      msg: '没有查询到该用户'
+    return null
+  }
+
+  /**
+   * 向用户颁发 JWT
+   * @param user
+   */
+  async login(user: UserEntity) {
+    const payload: JwtPayload = {
+      username: user.username,
+      role: user.role,
+      sub: user.id
     }
+    return this.jwtService.sign(payload)
+  }
+
+  /**
+   * 从 JWT 检索用户信息
+   * @param jwtPayload
+   */
+  async retrieveUserFromJwt(jwtPayload: JwtPayload): Promise<UserEntity | null> {
+    const user: UserEntity = await this.userService.findById(jwtPayload.sub)
+    if (user && user.username === jwtPayload.username) {
+      return user
+    }
+    return null
   }
 }

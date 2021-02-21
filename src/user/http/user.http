@@ -1,0 +1,15 @@
+### 用户注册
+POST http://localhost:3000/user
+Content-Type: application/x-www-form-urlencoded
+
+username=user01&password=123456&email=user01@localhost.com&nickname=超人一号
+
+### 查询所有用户信息
+GET http://localhost:3000/user
+Accept: application/json
+
+### 根据 username 查询用户信息
+GET http://localhost:3000/user?username=user01
+Accept: application/json
+
+###

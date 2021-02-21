@@ -1,17 +1,13 @@
 import { Entity, Column, PrimaryColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { Exclude } from 'class-transformer'
 import { v4 as uuidV4 } from 'uuid'
 
-import { Role } from './enums/role.enum'
-
-@Entity('app_user')
-export class UserEntity {
+@Entity('app_article')
+export class ArticleEntity {
   @PrimaryColumn({
     type: 'varchar',
     length: 36,
-    nullable: false,
     unique: true,
-    comment: '用户编号'
+    comment: '文章编号'
   })
   id: string
 
@@ -21,47 +17,28 @@ export class UserEntity {
   }
 
   @Column({
-    type: 'varchar',
-    length: 50,
-    unique: true,
-    comment: '用户名'
+    type: 'text',
+    length: 0,
+    nullable: false,
+    comment: '文章标题'
   })
-  username: string
+  title: string
+
+  @Column({
+    type: 'longtext',
+    length: 0,
+    comment: '文章正文'
+  })
+  content: string
 
   @Column({
     type: 'varchar',
-    length: 200,
-    comment: '密码'
+    name: 'user_id',
+    length: 36,
+    nullable: false,
+    comment: '用户编号'
   })
-  @Exclude()
-  password: string
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    unique: true,
-    comment: '邮箱'
-  })
-  email: string
-
-  @Column({
-    comment: '昵称'
-  })
-  nickname: string
-
-  @Column({
-    type: 'simple-enum',
-    enum: Role,
-    default: Role.User,
-    comment: '角色身份'
-  })
-  role: Role
-
-  @Column({
-    default: true,
-    comment: '用户状态'
-  })
-  isActive: boolean
+  userId: string
 
   @CreateDateColumn({
     type: 'timestamp',
