@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2021 Jaxson
+ * 项目名称：Vue-Admin-Plus-Nestjs-Api
+ * 文件名称：user.service.ts
+ * 创建日期：2021年02月22日
+ * 创建作者：Jaxson
+ */
+
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
@@ -29,7 +37,7 @@ export class UserService {
    * 根据登录账号查询
    * @param username
    */
-  async findOne(username: string): Promise<UserEntity> {
+  async findByUsername(username: string): Promise<UserEntity> {
     return (await this.userRepository.findOne({ username })) || null
   }
   /**

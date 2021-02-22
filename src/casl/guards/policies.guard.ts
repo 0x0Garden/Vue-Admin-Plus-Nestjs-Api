@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2021 Jaxson
+ * 项目名称：Vue-Admin-Plus-Nestjs-Api
+ * 文件名称：policies.guard.ts
+ * 创建日期：2021年02月22日
+ * 创建作者：Jaxson
+ */
+
 import { Injectable, CanActivate, ExecutionContext, Type, Scope } from '@nestjs/common'
 import { ContextIdFactory, ModuleRef, Reflector } from '@nestjs/core'
 import { Request } from 'express'

@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2021 Jaxson
+ * 项目名称：Vue-Admin-Plus-Nestjs-Api
+ * 文件名称：app.module.ts
+ * 创建日期：2021年02月22日
+ * 创建作者：Jaxson
+ */
+
 import { Connection } from 'typeorm'
 import { Module, ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common'
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'

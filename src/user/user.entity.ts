@@ -1,5 +1,12 @@
+/*
+ * Copyright (c) 2021 Jaxson
+ * 项目名称：Vue-Admin-Plus-Nestjs-Api
+ * 文件名称：user.entity.ts
+ * 创建日期：2021年02月22日
+ * 创建作者：Jaxson
+ */
+
 import { Entity, Column, PrimaryColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { Exclude } from 'class-transformer'
 import { v4 as uuidV4 } from 'uuid'
 
 import { Role } from './enums/role.enum'
@@ -33,7 +40,6 @@ export class UserEntity {
     length: 200,
     comment: '密码'
   })
-  @Exclude()
   password: string
 
   @Column({
