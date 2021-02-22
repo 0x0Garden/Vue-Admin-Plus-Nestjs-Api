@@ -5,13 +5,21 @@
  * 创建日期：2021年02月22日
  * 创建作者：Jaxson
  */
-
+import { ApiProperty } from '@nestjs/swagger'
 import { IsNotEmpty } from 'class-validator'
 
 export class LoginUserDto {
+  @ApiProperty({
+    type: String,
+    description: '用户账号'
+  })
   @IsNotEmpty()
   readonly username: string
 
+  @ApiProperty({
+    type: String,
+    description: '用户密码'
+  })
   @IsNotEmpty()
   readonly password: string
 }

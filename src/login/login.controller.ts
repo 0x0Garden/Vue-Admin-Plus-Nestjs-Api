@@ -7,18 +7,23 @@
  */
 
 import { Controller, Post, Body } from '@nestjs/common'
+import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
 
 import { AuthService } from '@/auth/auth.service'
+import { LoginUserDto } from '@/login/dto'
 import { Public } from '@/auth/decorators/public.decorator'
 import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
 
+@ApiBearerAuth()
+@ApiTags('login')
 @Controller('login')
 export class LoginController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOperation({ summary: '系统登录接口' })
   @Public()
   @Post('')
-  async login(@Body() loginUser: any) {
+  async login(@Body() loginUser: LoginUserDto) {
     const authResult = await this.authService.validateUser(loginUser)
     let data: ResponseGenerator
     switch (authResult.code) {
