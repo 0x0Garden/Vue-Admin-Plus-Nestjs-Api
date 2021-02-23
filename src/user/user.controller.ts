@@ -14,8 +14,9 @@ import { UserEntity } from './user.entity'
 import { CreateUserDto } from './dto'
 import { Acl } from '@/casl/decorators/acl.decorator'
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'
-import { CheckPolicies } from '@/casl/decorators/check-policies.decorator'
-import { CreateUserPolicyHandler } from '@/casl/policies/user/create-user-policy.handler'
+// import { CheckPolicies } from '@/casl/decorators/check-policies.decorator'
+// import { CreateUserPolicyHandler } from '@/casl/policies/user/create-user-policy.handler'
+import { Public } from '@/auth/decorators/public.decorator'
 
 @ApiBearerAuth()
 @ApiTags('user')
@@ -25,7 +26,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: '用户创建' })
-  @CheckPolicies(CreateUserPolicyHandler)
+  // @CheckPolicies(CreateUserPolicyHandler)
+  @Public()
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return this.userService.create(createUserDto)

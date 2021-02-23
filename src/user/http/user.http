@@ -2,7 +2,7 @@
 POST http://localhost:3000/user
 Content-Type: application/x-www-form-urlencoded
 
-username=user01&password=123456&email=user01@localhost.com&nickname=超人一号
+username=user02&password=123456&email=user01@localhost.com&nickname=超人一号
 
 ### 查询所有用户信息
 GET http://localhost:3000/user

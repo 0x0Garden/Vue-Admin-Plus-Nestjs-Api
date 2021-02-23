@@ -22,7 +22,7 @@ export class LoginController {
 
   @ApiOperation({ summary: '系统登录接口' })
   @Public()
-  @Post('')
+  @Post()
   async login(@Body() loginUser: LoginUserDto) {
     const authResult = await this.authService.validateUser(loginUser)
     let data: ResponseGenerator
