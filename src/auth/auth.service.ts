@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt'
 
 import { UserService } from '@/user/user.service'
 import { UserEntity } from '@/user/user.entity'
-import { LoginUserDto } from '@/login/dto'
+import { LoginUserDto } from '@/user/dto'
 import { JwtPayload } from '@/auth/dtos'
 import { UserData } from '@/user/user.interface'
 

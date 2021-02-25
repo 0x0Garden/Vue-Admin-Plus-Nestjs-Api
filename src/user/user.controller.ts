@@ -19,7 +19,7 @@ import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'
 import { Public } from '@/auth/decorators/public.decorator'
 
 @ApiBearerAuth()
-@ApiTags('user')
+@ApiTags('用户管理')
 @Acl(JwtAuthGuard)
 @Controller('user')
 export class UserController {
