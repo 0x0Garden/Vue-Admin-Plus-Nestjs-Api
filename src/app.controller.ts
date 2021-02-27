@@ -30,7 +30,7 @@ export class AppController {
   async login(@Body() loginUser: LoginUserDto): Promise<ResponseGenerator> {
     const authResult = await this.authService.validateUser(loginUser)
     let data: ResponseGenerator
-    switch (authResult.code) {
+    switch (authResult.statusCode) {
       case 200:
         const token = await this.authService.certificate(authResult.user)
         data = ResponseResult.success(await this.authService.loginUserData(authResult.user, token), '登录成功')

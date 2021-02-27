@@ -16,7 +16,7 @@ import { JwtPayload } from '@/auth/dtos'
 import { UserData } from '@/user/user.interface'
 
 class ValidateUser {
-  code: number
+  statusCode: number
   user: UserEntity | null
 }
 
@@ -32,11 +32,11 @@ export class AuthService {
     const user = await this.userService.findByUsername(username)
     return user && user.password === password
       ? {
-          code: 200,
+        statusCode: 200,
           user
         }
       : {
-          code: 400,
+        statusCode: 400,
           user: null
         }
   }

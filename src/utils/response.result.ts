@@ -9,7 +9,7 @@
 import { StatusCode } from './enum/code.enum'
 
 export interface ResponseGenerator {
-  code: number
+  statusCode: number
   message: string
   data?: any
 }
@@ -22,19 +22,19 @@ export class ResponseResult {
    */
   static success(data: any = {}, message = 'success'): ResponseGenerator {
     return {
-      code: StatusCode.SUCCESS,
+      statusCode: StatusCode.SUCCESS,
       message,
       data
     }
   }
   /**
    * 业务处理响应失败
-   * @param code
+   * @param statusCode
    * @param message
    */
-  static fail(code: number, message: string): ResponseGenerator {
+  static fail(statusCode: number, message: string): ResponseGenerator {
     return {
-      code,
+      statusCode,
       message
     }
   }
