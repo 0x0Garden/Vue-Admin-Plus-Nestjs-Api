@@ -10,7 +10,7 @@ import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 
 import { UserService } from '@/user/user.service'
-import { UserEntity } from '@/user/user.entity'
+import { UserEntity } from '@/user/entities/user.entity'
 import { LoginUserDto } from '@/user/dto'
 import { JwtPayload } from '@/auth/dtos'
 import { UserData } from '@/user/user.interface'

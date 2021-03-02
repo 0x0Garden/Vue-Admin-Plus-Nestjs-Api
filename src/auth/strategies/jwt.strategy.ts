@@ -11,7 +11,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Strategy, ExtractJwt } from 'passport-jwt'
 
 import { AuthService } from '../auth.service'
-import { UserEntity } from '@/user/user.entity'
+import { UserEntity } from '@/user/entities/user.entity'
 import { JwtPayload } from '../dtos'
 import { jwtConstants } from '../constants'
 

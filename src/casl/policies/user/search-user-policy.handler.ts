@@ -8,7 +8,7 @@
 
 import { PolicyHandler } from '../policy-handler.interface'
 import { AppAbility } from '@/casl/casl-ability.factory'
-import { UserEntity } from '@/user/user.entity'
+import { UserEntity } from '@/user/entities/user.entity'
 import { Action } from '@/casl/enums/action.enum'
 
 export class SearchUserPolicyHandler implements PolicyHandler {

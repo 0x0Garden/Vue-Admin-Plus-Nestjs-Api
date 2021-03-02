@@ -10,7 +10,7 @@ import { Controller, Get, Post, Delete, Param, Body } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
 
 import { UserService } from './user.service'
-import { UserEntity } from './user.entity'
+import { UserEntity } from '@/user/entities/user.entity'
 import { CreateUserDto } from './dto'
 import { Acl } from '@/casl/decorators/acl.decorator'
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'

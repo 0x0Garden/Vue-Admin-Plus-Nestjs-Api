@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { BcryptService } from '@/utils/bcrypt.service'
 import { UserController } from './user.controller'
 import { UserService } from './user.service'
-import { UserEntity } from './user.entity'
+import { UserEntity } from '@/user/entities/user.entity'
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],

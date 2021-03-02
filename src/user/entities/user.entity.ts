@@ -1,52 +1,73 @@
 /*
  * Copyright (c) 2021 Jaxson
  * 项目名称：Vue-Admin-Plus-Nestjs-Api
- * 文件名称：article.entity.ts
- * 创建日期：2021年02月22日
+ * 文件名称：user.entity.ts
+ * 创建日期：2021年03月02日
  * 创建作者：Jaxson
  */
 
 import { Entity, Column, PrimaryColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { v4 as uuidV4 } from 'uuid'
+import { v4 as guid } from 'uuid'
 
-@Entity('app_article')
-export class ArticleEntity {
+import { Role } from '../enums/role.enum'
+
+@Entity('app_user')
+export class UserEntity {
   @PrimaryColumn({
     type: 'varchar',
     length: 36,
+    nullable: false,
     unique: true,
-    comment: '文章编号'
+    comment: '用户编号'
   })
   id: string
 
   @BeforeInsert()
   updateId(): void {
-    this.id = uuidV4()
+    this.id = guid()
   }
 
   @Column({
-    type: 'text',
-    length: 0,
-    nullable: false,
-    comment: '文章标题'
+    type: 'varchar',
+    length: 50,
+    unique: true,
+    comment: '用户名'
   })
-  title: string
-
-  @Column({
-    type: 'longtext',
-    length: 0,
-    comment: '文章正文'
-  })
-  content: string
+  username: string
 
   @Column({
     type: 'varchar',
-    name: 'user_id',
-    length: 36,
-    nullable: false,
-    comment: '用户编号'
+    length: 200,
+    comment: '密码'
   })
-  userId: string
+  password: string
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    unique: true,
+    comment: '邮箱'
+  })
+  email: string
+
+  @Column({
+    comment: '昵称'
+  })
+  nickname: string
+
+  @Column({
+    type: 'simple-enum',
+    enum: Role,
+    default: Role.User,
+    comment: '角色身份'
+  })
+  role: Role
+
+  @Column({
+    default: true,
+    comment: '用户状态'
+  })
+  isActive: boolean
 
   @CreateDateColumn({
     type: 'timestamp',

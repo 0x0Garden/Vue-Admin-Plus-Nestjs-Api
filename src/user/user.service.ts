@@ -12,7 +12,7 @@ import { Repository } from 'typeorm'
 
 import { BcryptService } from '@/utils/bcrypt.service'
 import { CreateUserDto } from './dto'
-import { UserEntity } from './user.entity'
+import { UserEntity } from '@/user/entities/user.entity'
 
 @Injectable()
 export class UserService {
@@ -22,6 +22,10 @@ export class UserService {
     private bcryptService: BcryptService
   ) {}
 
+  /**
+   * 用户创建
+   * @param createUserDto
+   */
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const user = new UserEntity()
     user.username = createUserDto.username
@@ -32,9 +36,13 @@ export class UserService {
     return this.userRepository.save(user)
   }
 
+  /**
+   * 查找用户
+   */
   findAll(): Promise<UserEntity[]> {
     return this.userRepository.find()
   }
+
   /**
    * 根据登录账号查询
    * @param username
@@ -42,6 +50,7 @@ export class UserService {
   async findByUsername(username: string): Promise<UserEntity> {
     return (await this.userRepository.findOne({ username })) || null
   }
+
   /**
    * 根据编码查询
    * @param id
@@ -50,6 +59,10 @@ export class UserService {
     return this.userRepository.findOne(id)
   }
 
+  /**
+   * 删除用户
+   * @param id
+   */
   async remove(id: string): Promise<void> {
     await this.userRepository.delete(id)
   }
