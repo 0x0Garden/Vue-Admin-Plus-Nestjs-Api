@@ -45,8 +45,8 @@ export class RouteEntity {
   })
   component: string
 
-  @Column({
-    comment: '权限审计'
-  })
-  audit: any
+  // @Column({
+  //   comment: '权限审计'
+  // })
+  // audit: any
 }

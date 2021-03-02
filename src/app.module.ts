@@ -17,10 +17,10 @@ import { UserModule } from './user/user.module'
 import { CaslModule } from './casl/casl.module'
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard'
 import { AuthModule } from './auth/auth.module'
-import { RouteModule } from './route/route.module'
+// import { RouteModule } from './route/route.module'
 
 @Module({
-  imports: [TypeOrmModule.forRoot(TypeOrmConfigModule), AuthModule, UserModule, CaslModule, RouteModule],
+  imports: [TypeOrmModule.forRoot(TypeOrmConfigModule), AuthModule, UserModule, CaslModule],
   controllers: [AppController],
   providers: [
     {

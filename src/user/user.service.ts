@@ -44,6 +44,17 @@ export class UserService {
   }
 
   /**
+   * 查找用户
+   */
+  async filterAndPageQuery(params: any): Promise<any> {
+    const data = this.userRepository
+      .createQueryBuilder('app_user')
+      .skip(params.pageSize * (params.pageNum - 1)).take(params.pageSize)
+      .take(params.pageSize)
+    return await data.getManyAndCount()
+  }
+
+  /**
    * 根据登录账号查询
    * @param username
    */
