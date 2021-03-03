@@ -14,6 +14,14 @@ export interface ResponseGenerator {
   data?: any
 }
 
+export interface PaginationRO {
+  totalCount: number
+  totalPage: number
+  currentPage: number
+  pageSize: number
+  list: Array<any>
+}
+
 export class ResponseResult {
   /**
    * 业务处理响应成功

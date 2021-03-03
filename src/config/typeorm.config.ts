@@ -15,6 +15,7 @@ export const TypeOrmConfigModule: TypeOrmModuleOptions = {
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
+  entityPrefix: 'app_',
   entities: ['dist/**/*.entity{.ts,.js}'],
   synchronize: process.env.NODE_ENV === 'development'
 }

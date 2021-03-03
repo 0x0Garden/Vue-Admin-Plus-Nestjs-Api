@@ -37,10 +37,7 @@ export class UserController {
   @ApiOperation({ summary: '查询所有用户信息列表' })
   @Get()
   async findAll(@Query() queryUserDto: QueryUserDto): Promise<ResponseGenerator> {
-    // const data: UserEntity[] = await this.userService.findAll()
-    const { pageNum, pageSize } = queryUserDto
-    console.log(pageNum, pageSize)
-    const data = await this.userService.filterAndPageQuery({ pageNum: 1, pageSize: 1 })
+    const data = await this.userService.filterAndPageQuery(queryUserDto)
     return ResponseResult.success(data, '获取成功')
   }
 

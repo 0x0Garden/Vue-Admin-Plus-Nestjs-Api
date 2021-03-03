@@ -1,15 +1,20 @@
 ### 用户注册
-POST http://localhost:3000/user
+POST http://localhost:3000/api/user
 Content-Type: application/x-www-form-urlencoded
 
-username=user02&password=123456&email=user01@localhost.com&nickname=超人一号
+username=user04&password=123456&email=user04@localhost.com&nickname=超人一号
 
 ### 查询所有用户信息
-GET http://localhost:3000/user
+GET http://localhost:3000/api/user
 Accept: application/json
 
+### 根据条件查询所有用户带有分页
+GET http://localhost:3000/api/user?pageSize=2&currentPage=1
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIwMSIsInJvbGUiOiJhZG1pbiIsInN1YiI6IjAyYzE0MTlmLTE5ZWMtNDVmOC04YTQ0LTgzNjAxYTMxNjEwNCIsImlhdCI6MTYxNDc2NjI5OSwiZXhwIjoxNjE0NzcyMjk5fQ.XvebeddD3uhfals7fye_yl6yse_HpEPbchpVz9xjTDA
+
 ### 根据 username 查询用户信息
-GET http://localhost:3000/user?username=user01
+GET http://localhost:3000/api/user?username=user01
 Accept: application/json
 
 ###

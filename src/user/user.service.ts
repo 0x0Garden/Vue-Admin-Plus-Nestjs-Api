@@ -6,13 +6,14 @@
  * 创建作者：Jaxson
  */
 
-import { Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Injectable } from "@nestjs/common"
+import { InjectRepository } from "@nestjs/typeorm"
+import { Repository } from "typeorm"
 
-import { BcryptService } from '@/utils/bcrypt.service'
-import { CreateUserDto } from './dto'
-import { UserEntity } from '@/user/entities/user.entity'
+import { BcryptService } from "@/utils/bcrypt.service"
+import { CreateUserDto, QueryUserDto } from "./dto"
+import { UserEntity } from "@/user/entities/user.entity"
+import { PaginationRO } from '@/utils/response.result'
 
 @Injectable()
 export class UserService {
@@ -46,12 +47,25 @@ export class UserService {
   /**
    * 查找用户
    */
-  async filterAndPageQuery(params: any): Promise<any> {
-    const data = this.userRepository
-      .createQueryBuilder('app_user')
-      .skip(params.pageSize * (params.pageNum - 1)).take(params.pageSize)
-      .take(params.pageSize)
-    return await data.getManyAndCount()
+  async filterAndPageQuery({ username  = '', pageSize = 10, currentPage = 1, order = 'DESC' }: QueryUserDto): Promise<PaginationRO> {
+    const skippedItems: number = pageSize * (currentPage - 1)
+
+    const totalCount: number = await this.userRepository.count()
+
+    const users: UserEntity[] = await this.userRepository.createQueryBuilder('user')
+      .orderBy('created_time', order)
+      // .where(username as Partial<UserEntity>)
+      .skip(skippedItems)
+      .take(pageSize)
+      .getMany()
+
+    return {
+      totalCount,
+      totalPage: Math.ceil(totalCount / pageSize),
+      currentPage: currentPage,
+      pageSize: pageSize,
+      list: users
+    }
   }
 
   /**

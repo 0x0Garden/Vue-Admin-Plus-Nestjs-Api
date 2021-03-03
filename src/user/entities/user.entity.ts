@@ -11,7 +11,7 @@ import { v4 as guid } from 'uuid'
 
 import { Role } from '../enums/role.enum'
 
-@Entity('app_user')
+@Entity('user')
 export class UserEntity {
   @PrimaryColumn({
     type: 'varchar',
