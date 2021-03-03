@@ -49,7 +49,8 @@ export class UserController {
 
   @ApiOperation({ summary: '根据用户编号删除用户' })
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<void> {
-    return this.userService.remove(id)
+  async remove(@Param('id') id: string): Promise<ResponseGenerator> {
+    const data = await this.userService.remove(id)
+    return ResponseResult.success(data, '删除成功！')
   }
 }

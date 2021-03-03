@@ -21,7 +21,7 @@ export class QueryUserDto {
     description: '页码',
   })
   @Type(() => Number)
-  @ValidateIf(o => o.pageNum)
+  @ValidateIf(o => o.currentPage)
   @IsInt()
   readonly currentPage?: number
 
@@ -30,7 +30,7 @@ export class QueryUserDto {
     description: '条数',
   })
   @Type(() => Number)
-  @ValidateIf(o => o.pageNum)
+  @ValidateIf(o => o.currentPage)
   @IsInt()
   readonly pageSize?: number
 

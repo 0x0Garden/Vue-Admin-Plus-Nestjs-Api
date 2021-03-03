@@ -47,7 +47,7 @@ export class UserService {
   /**
    * 查找用户
    */
-  async filterAndPageQuery({ username  = '', pageSize = 10, currentPage = 1, order = 'DESC' }: QueryUserDto): Promise<PaginationRO> {
+  async filterAndPageQuery({ pageSize = 10, currentPage = 1, order = 'DESC' }: QueryUserDto): Promise<PaginationRO> {
     const skippedItems: number = pageSize * (currentPage - 1)
 
     const totalCount: number = await this.userRepository.count()
