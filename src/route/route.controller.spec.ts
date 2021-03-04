@@ -1,20 +1,20 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { RouteController } from './route.controller';
-import { RouteService } from './route.service';
+import { Test, TestingModule } from '@nestjs/testing'
+import { RouteController } from './route.controller'
+import { RouteService } from './route.service'
 
 describe('RouteController', () => {
-  let controller: RouteController;
+  let controller: RouteController
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [RouteController],
-      providers: [RouteService],
-    }).compile();
+      providers: [RouteService]
+    }).compile()
 
-    controller = module.get<RouteController>(RouteController);
-  });
+    controller = module.get<RouteController>(RouteController)
+  })
 
   it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-});
+    expect(controller).toBeDefined()
+  })
+})

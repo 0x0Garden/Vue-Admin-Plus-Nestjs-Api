@@ -14,6 +14,7 @@ import { UserEntity } from '@/user/entities/user.entity'
 import { LoginUserDto } from '@/user/dto'
 import { JwtPayload } from '@/auth/dtos'
 import { UserData } from '@/user/user.interface'
+import { StatusCode } from '@/utils/enum/code.enum'
 
 class ValidateUser {
   statusCode: number
@@ -32,11 +33,11 @@ export class AuthService {
     const user = await this.userService.findByUsername(username)
     return user && user.password === password
       ? {
-        statusCode: 200,
+          statusCode: StatusCode.SUCCESS,
           user
         }
       : {
-        statusCode: 400,
+          statusCode: StatusCode.BUSINESS_FAIL,
           user: null
         }
   }

@@ -6,13 +6,13 @@
  * 创建作者：Jaxson
  */
 
-import { Injectable } from "@nestjs/common"
-import { InjectRepository } from "@nestjs/typeorm"
-import { Repository } from "typeorm"
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 
-import { BcryptService } from "@/utils/bcrypt.service"
-import { CreateUserDto, QueryUserDto } from "./dto"
-import { UserEntity } from "@/user/entities/user.entity"
+import { BcryptService } from '@/utils/bcrypt.service'
+import { CreateUserDto, QueryUserDto } from './dto'
+import { UserEntity } from '@/user/entities/user.entity'
 import { PaginationRO } from '@/utils/response.result'
 
 @Injectable()
@@ -52,7 +52,8 @@ export class UserService {
 
     const totalCount: number = await this.userRepository.count()
 
-    const users: UserEntity[] = await this.userRepository.createQueryBuilder('user')
+    const users: UserEntity[] = await this.userRepository
+      .createQueryBuilder('user')
       .orderBy('created_time', order)
       // .where(username as Partial<UserEntity>)
       .skip(skippedItems)

@@ -13,6 +13,7 @@ import { AuthService } from '@/auth/auth.service'
 import { LoginUserDto } from '@/user/dto'
 import { Public } from '@/auth/decorators/public.decorator'
 import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
+import { StatusCode } from '@/utils/enum/code.enum'
 
 @ApiBearerAuth()
 @ApiTags('全局')
@@ -36,10 +37,10 @@ export class AppController {
         data = ResponseResult.success(await this.authService.loginUserData(authResult.user, token), '登录成功')
         break
       case 400:
-        data = ResponseResult.fail(400, '登录失败，请检查用户名或者密码是否正确！')
+        data = ResponseResult.fail(StatusCode.BUSINESS_FAIL, '登录失败，请检查用户名或者密码是否正确！')
         break
       default:
-        data = ResponseResult.fail(-1, '未知错误')
+        data = ResponseResult.fail(StatusCode.TIMEOUT, '未知错误')
     }
     return data
   }

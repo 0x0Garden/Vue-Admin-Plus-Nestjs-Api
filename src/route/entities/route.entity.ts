@@ -6,7 +6,7 @@
  * 创建作者：Jaxson
  */
 
-import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm"
+import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm'
 import { v4 as guid } from 'uuid'
 
 @Entity('route')

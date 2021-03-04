@@ -6,7 +6,7 @@
  * 创建作者：Jaxson
  */
 
-import { ExecutionContext, Injectable } from '@nestjs/common'
+import { ExecutionContext, Injectable, HttpException, HttpStatus } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 import { Observable } from 'rxjs'
@@ -21,5 +21,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [context.getHandler(), context.getClass()])
     return isPublic ? true : super.canActivate(context)
+  }
+  handleRequest(err: any, user: any, info: Error): any {
+    if (info) {
+      if (info.name === 'TokenExpiredError') {
+        throw new HttpException('TokenExpired', HttpStatus.UNAUTHORIZED)
+      } else {
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
+      }
+    }
   }
 }

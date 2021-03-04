@@ -18,7 +18,7 @@ export class QueryUserDto {
 
   @ApiProperty({
     type: Number,
-    description: '页码',
+    description: '页码'
   })
   @Type(() => Number)
   @ValidateIf(o => o.currentPage)
@@ -27,7 +27,7 @@ export class QueryUserDto {
 
   @ApiProperty({
     type: Number,
-    description: '条数',
+    description: '条数'
   })
   @Type(() => Number)
   @ValidateIf(o => o.currentPage)
@@ -36,7 +36,7 @@ export class QueryUserDto {
 
   @ApiProperty({
     type: String,
-    description: '排序的方式: ASC, DESC',
+    description: '排序的方式: ASC, DESC'
   })
   @ValidateIf(o => o.sortKey)
   readonly order?: 'DESC' | 'ASC'
