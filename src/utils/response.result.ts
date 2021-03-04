@@ -7,11 +7,13 @@
  */
 
 import { StatusCode } from './enum/code.enum'
+import { UserEntityHasToken } from '@/auth/dtos'
 
 export interface ResponseGenerator {
   statusCode: number
   message: string
   data?: any
+  token?: string
 }
 
 export interface PaginationRO {
@@ -27,13 +29,16 @@ export class ResponseResult {
    * 业务处理响应成功
    * @param data
    * @param message
+   * @param user
    */
-  static success(data: any = {}, message = 'success'): ResponseGenerator {
-    return {
+  static success(data: any = {}, message = 'success', user?: UserEntityHasToken): ResponseGenerator {
+    const response: ResponseGenerator = {
       statusCode: StatusCode.SUCCESS,
       message,
       data
     }
+    if (user && user.token) response.token = user.token
+    return response
   }
   /**
    * 业务处理响应失败

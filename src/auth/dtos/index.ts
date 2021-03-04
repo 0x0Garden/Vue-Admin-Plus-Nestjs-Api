@@ -6,4 +6,4 @@
  * 创建作者：Jaxson
  */
 
-export { JwtPayload } from './jwt-payload.dto'
+export { JwtPayload, FullJwtPayload, UserEntityHasToken } from './jwt-payload.dto'

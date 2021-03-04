@@ -6,7 +6,7 @@
  * 创建作者：Jaxson
  */
 
-import { Controller, Get, Post, Delete, Param, Body, Query } from '@nestjs/common'
+import { Controller, Get, Post, Delete, Request, Param, Body, Query } from '@nestjs/common'
 import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
 
 import { UserService } from './user.service'
@@ -14,6 +14,7 @@ import { UserEntity } from '@/user/entities/user.entity'
 import { CreateUserDto, QueryUserDto } from './dto'
 import { Acl } from '@/casl/decorators/acl.decorator'
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'
+import { User } from '@/auth/decorators'
 // import { CheckPolicies } from '@/casl/decorators/check-policies.decorator'
 // import { CreateUserPolicyHandler } from '@/casl/policies/user/create-user-policy.handler'
 import { Public } from '@/auth/decorators/public.decorator'
@@ -36,9 +37,9 @@ export class UserController {
 
   @ApiOperation({ summary: '查询所有用户信息列表' })
   @Get()
-  async findAll(@Query() queryUserDto: QueryUserDto): Promise<ResponseGenerator> {
+  async findAll(@Query() queryUserDto: QueryUserDto, @User() user): Promise<ResponseGenerator> {
     const data = await this.userService.filterAndPageQuery(queryUserDto)
-    return ResponseResult.success(data, '获取成功')
+    return ResponseResult.success(data, '获取成功', user)
   }
 
   @ApiOperation({ summary: '根据用户编号查询用户信息' })
@@ -49,8 +50,8 @@ export class UserController {
 
   @ApiOperation({ summary: '根据用户编号删除用户' })
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<ResponseGenerator> {
+  async remove(@Param('id') id: string, @User() user): Promise<ResponseGenerator> {
     const data = await this.userService.remove(id)
-    return ResponseResult.success(data, '删除成功！')
+    return ResponseResult.success(data, '删除成功！', user)
   }
 }

@@ -12,7 +12,7 @@ import { JwtService } from '@nestjs/jwt'
 import { UserService } from '@/user/user.service'
 import { UserEntity } from '@/user/entities/user.entity'
 import { LoginUserDto } from '@/user/dto'
-import { JwtPayload } from '@/auth/dtos'
+import { JwtPayload, FullJwtPayload, UserEntityHasToken } from '@/auth/dtos'
 import { UserData } from '@/user/user.interface'
 import { StatusCode } from '@/utils/enum/code.enum'
 
@@ -57,12 +57,23 @@ export class AuthService {
    * 从 JWT 检索用户信息
    * @param jwtPayload
    */
-  async retrieveUserFromJwt(jwtPayload: JwtPayload): Promise<UserEntity | null> {
+  async retrieveUserFromJwt(jwtPayload: FullJwtPayload): Promise<UserEntityHasToken | null> {
     const user: UserEntity = await this.userService.findById(jwtPayload.sub)
+    let data: UserEntityHasToken = user
     if (user && user.username === jwtPayload.username) {
-      return user
+      // 从 jwtPayload 获取生成 jwt token 生成的时间戳
+      // 如果在快过期的五分钟时间段内，则生成新的 jwt token
+      const limitTimeMap = 60 * 5
+      // if (jwtPayload.iat + limitTimeMap >= jwtPayload.exp) {
+      //   data.token = await this.certificate(user)
+      // }
+      if (jwtPayload.exp - Math.round(new Date().valueOf() / 1000) <= limitTimeMap) {
+        data.token = await this.certificate(user)
+      }
+    } else {
+      data = null
     }
-    return null
+    return data
   }
   /**
    * 返回用户登录信息

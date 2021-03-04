@@ -11,7 +11,8 @@ import { Reflector } from '@nestjs/core'
 import { AuthGuard } from '@nestjs/passport'
 import { Observable } from 'rxjs'
 
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator'
+import { IS_PUBLIC_KEY } from '@/auth/decorators'
+import { UserEntity } from '@/user/entities/user.entity'
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -22,7 +23,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [context.getHandler(), context.getClass()])
     return isPublic ? true : super.canActivate(context)
   }
-  handleRequest(err: any, user: any, info: Error): any {
+  handleRequest(err: any, user: UserEntity, info: Error): any {
     if (info) {
       if (info.name === 'TokenExpiredError') {
         throw new HttpException('TokenExpired', HttpStatus.UNAUTHORIZED)
@@ -30,5 +31,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
       }
     }
+    return user
   }
 }

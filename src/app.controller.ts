@@ -14,6 +14,8 @@ import { LoginUserDto } from '@/user/dto'
 import { Public } from '@/auth/decorators/public.decorator'
 import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
 import { StatusCode } from '@/utils/enum/code.enum'
+import { User } from '@/auth/decorators'
+import { UserEntityHasToken } from '@/auth/dtos'
 
 @ApiBearerAuth()
 @ApiTags('全局')
@@ -24,6 +26,7 @@ export class AppController {
   /**
    * 登录接口
    * @param loginUser
+   * @param user
    */
   @ApiOperation({ summary: '系统登录接口' })
   @Public()
@@ -48,6 +51,8 @@ export class AppController {
   @ApiOperation({ summary: '获取用户信息' })
   @Get('getInfo')
   async getInfo(@Request() req): Promise<ResponseGenerator> {
-    return ResponseResult.success(req.user, '获取成功')
+    const data: UserEntityHasToken = req.user
+    if (data.token) delete data.token
+    return ResponseResult.success(data, '获取成功')
   }
 }

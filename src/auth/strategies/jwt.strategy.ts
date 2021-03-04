@@ -12,13 +12,8 @@ import { Strategy, ExtractJwt } from 'passport-jwt'
 
 import { AuthService } from '../auth.service'
 import { UserEntity } from '@/user/entities/user.entity'
-import { JwtPayload } from '../dtos'
+import { FullJwtPayload } from '../dtos'
 import { jwtConstants } from '../constants'
-
-interface FullJwtPayload extends JwtPayload {
-  iat: number
-  exp: number
-}
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -31,9 +26,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(fullJwtPayload: FullJwtPayload): Promise<UserEntity> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { exp, iat, ...payload } = fullJwtPayload
-    const user = await this.authService.retrieveUserFromJwt(payload)
+    // const { exp, iat, ...payload } = fullJwtPayload
+    const user = await this.authService.retrieveUserFromJwt(fullJwtPayload)
     if (!user) {
       throw new UnauthorizedException()
     }
