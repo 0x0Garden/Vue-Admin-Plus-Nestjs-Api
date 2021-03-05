@@ -5,15 +5,22 @@
  * 创建日期：2021年02月22日
  * 创建作者：Jaxson
  */
-import './config/dotenv'
-import { NestFactory } from '@nestjs/core'
+import { NestFactory, Reflector } from '@nestjs/core'
+import { ValidationPipe } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
 import { AppModule } from './app.module'
+import { BadRequestFilter, QueryFailedFilter } from '@/filters'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule, {
+    logger: true
+  })
+  const reflector = app.get(Reflector)
+
   app.setGlobalPrefix('api')
+  app.useGlobalPipes(new ValidationPipe())
+  app.useGlobalFilters(new BadRequestFilter(reflector), new QueryFailedFilter(reflector))
   app.enableCors() // 启用允许跨域
 
   const config = new DocumentBuilder()

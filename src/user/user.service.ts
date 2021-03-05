@@ -6,14 +6,15 @@
  * 创建作者：Jaxson
  */
 
-import { Injectable } from '@nestjs/common'
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { BcryptService } from '@/utils/bcrypt.service'
 import { CreateUserDto, QueryUserDto } from './dto'
 import { UserEntity } from '@/user/entities/user.entity'
-import { PaginationRO } from '@/utils/response.result'
+import { PaginationRO, ServiceRO } from '@/utils/response.result'
+import { StatusCode } from '@/utils/enum/code.enum'
 
 @Injectable()
 export class UserService {
@@ -27,14 +28,26 @@ export class UserService {
    * 用户创建
    * @param createUserDto
    */
-  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const user = new UserEntity()
-    user.username = createUserDto.username
-    user.password = await this.bcryptService.hash(createUserDto.password)
-    user.email = createUserDto.email
-    user.nickname = createUserDto.nickname
+  async create(createUserDto: CreateUserDto): Promise<ServiceRO> {
+    const { username, password, email, nickname } = createUserDto
+    // 检查身份用户名和邮箱是否存在
+    const queryBuilderUser = await this.userRepository.createQueryBuilder('user').where('user.username', { username }).orWhere('user.email = :email', { email }).getOne()
+    if (queryBuilderUser) {
+      return {
+        code: StatusCode.BUSINESS_FAIL
+      }
+    }
 
-    return this.userRepository.save(user)
+    const user = new UserEntity()
+    user.username = username
+    user.password = await this.bcryptService.hash(password)
+    user.email = email
+    user.nickname = nickname
+
+    return {
+      code: StatusCode.SUCCESS,
+      data: this.userRepository.save(user)
+    }
   }
 
   /**

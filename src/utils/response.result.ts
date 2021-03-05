@@ -24,6 +24,11 @@ export interface PaginationRO {
   list: Array<any>
 }
 
+export interface ServiceRO {
+  code: number
+  data?: any
+}
+
 export class ResponseResult {
   /**
    * 业务处理响应成功

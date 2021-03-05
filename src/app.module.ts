@@ -10,7 +10,9 @@ import { Connection } from 'typeorm'
 import { Module, ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common'
 import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 
+import configuration from './config/configuration'
 import { TypeOrmConfigModule } from './config/typeorm.config'
 import { AppController } from './app.controller'
 import { UserModule } from './user/user.module'
@@ -20,7 +22,21 @@ import { AuthModule } from './auth/auth.module'
 // import { RouteModule } from './route/route.module'
 
 @Module({
-  imports: [TypeOrmModule.forRoot(TypeOrmConfigModule), AuthModule, UserModule, CaslModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env.local', '.env'],
+      load: [configuration]
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => TypeOrmConfigModule(configService),
+      inject: [ConfigService]
+    }),
+    AuthModule,
+    UserModule,
+    CaslModule
+  ],
   controllers: [AppController],
   providers: [
     {

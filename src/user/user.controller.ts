@@ -19,6 +19,7 @@ import { User } from '@/auth/decorators'
 // import { CreateUserPolicyHandler } from '@/casl/policies/user/create-user-policy.handler'
 import { Public } from '@/auth/decorators/public.decorator'
 import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
+import { StatusCode } from '@/utils/enum/code.enum'
 
 @ApiBearerAuth()
 @ApiTags('用户管理')
@@ -31,8 +32,20 @@ export class UserController {
   // @CheckPolicies(CreateUserPolicyHandler)
   @Public()
   @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
-    return this.userService.create(createUserDto)
+  async create(@Body() createUserDto: CreateUserDto): Promise<ResponseGenerator> {
+    const userResult = await this.userService.create(createUserDto)
+    let data: ResponseGenerator
+    switch (userResult.code) {
+      case 200:
+        data = ResponseResult.success('success', '创建成功')
+        break
+      case 400:
+        data = ResponseResult.fail(StatusCode.BUSINESS_FAIL, '创建失败，登录账号或者邮箱已重复！')
+        break
+      default:
+        data = ResponseResult.fail(StatusCode.TIMEOUT, '未知错误')
+    }
+    return data
   }
 
   @ApiOperation({ summary: '查询所有用户信息列表' })

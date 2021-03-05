@@ -14,7 +14,6 @@ import { LoginUserDto } from '@/user/dto'
 import { Public } from '@/auth/decorators/public.decorator'
 import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
 import { StatusCode } from '@/utils/enum/code.enum'
-import { User } from '@/auth/decorators'
 import { UserEntityHasToken } from '@/auth/dtos'
 
 @ApiBearerAuth()
@@ -26,7 +25,6 @@ export class AppController {
   /**
    * 登录接口
    * @param loginUser
-   * @param user
    */
   @ApiOperation({ summary: '系统登录接口' })
   @Public()
@@ -34,10 +32,10 @@ export class AppController {
   async login(@Body() loginUser: LoginUserDto): Promise<ResponseGenerator> {
     const authResult = await this.authService.validateUser(loginUser)
     let data: ResponseGenerator
-    switch (authResult.statusCode) {
+    switch (authResult.code) {
       case 200:
-        const token = await this.authService.certificate(authResult.user)
-        data = ResponseResult.success(await this.authService.loginUserData(authResult.user, token), '登录成功')
+        const token = await this.authService.certificate(authResult.data)
+        data = ResponseResult.success(await this.authService.loginUserData(authResult.data, token), '登录成功')
         break
       case 400:
         data = ResponseResult.fail(StatusCode.BUSINESS_FAIL, '登录失败，请检查用户名或者密码是否正确！')

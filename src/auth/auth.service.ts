@@ -15,10 +15,10 @@ import { LoginUserDto } from '@/user/dto'
 import { JwtPayload, FullJwtPayload, UserEntityHasToken } from '@/auth/dtos'
 import { UserData } from '@/user/user.interface'
 import { StatusCode } from '@/utils/enum/code.enum'
+import { ServiceRO } from '@/utils/response.result'
 
-class ValidateUser {
-  statusCode: number
-  user: UserEntity | null
+interface ValidateUser extends ServiceRO {
+  data: UserEntity | null
 }
 
 @Injectable()
@@ -33,12 +33,12 @@ export class AuthService {
     const user = await this.userService.findByUsername(username)
     return user && user.password === password
       ? {
-          statusCode: StatusCode.SUCCESS,
-          user
+          code: StatusCode.SUCCESS,
+          data: user
         }
       : {
-          statusCode: StatusCode.BUSINESS_FAIL,
-          user: null
+          code: StatusCode.BUSINESS_FAIL,
+          data: null
         }
   }
   /**
