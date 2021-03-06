@@ -9,7 +9,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { BcryptService } from '@/utils/bcrypt.service'
+import { BcryptService } from '@/shared/services/bcrypt.service'
 import { UserController } from './user.controller'
 import { UserService } from './user.service'
 import { UserEntity } from '@/user/entities/user.entity'

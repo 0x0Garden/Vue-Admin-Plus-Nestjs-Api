@@ -6,11 +6,11 @@
  * 创建作者：Jaxson
  */
 
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
-import { BcryptService } from '@/utils/bcrypt.service'
+import { BcryptService } from '@/shared/services/bcrypt.service'
 import { CreateUserDto, QueryUserDto } from './dto'
 import { UserEntity } from '@/user/entities/user.entity'
 import { PaginationRO, ServiceRO } from '@/utils/response.result'
@@ -31,7 +31,11 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<ServiceRO> {
     const { username, password, email, nickname } = createUserDto
     // 检查身份用户名和邮箱是否存在
-    const queryBuilderUser = await this.userRepository.createQueryBuilder('user').where('user.username', { username }).orWhere('user.email = :email', { email }).getOne()
+    const queryBuilderUser = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.username = :username', { username })
+      .orWhere('user.email = :email', { email })
+      .getOne()
     if (queryBuilderUser) {
       return {
         code: StatusCode.BUSINESS_FAIL

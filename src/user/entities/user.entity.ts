@@ -31,7 +31,7 @@ export class UserEntity {
     type: 'varchar',
     length: 50,
     unique: true,
-    comment: '用户名'
+    comment: '登录用户'
   })
   username: string
 

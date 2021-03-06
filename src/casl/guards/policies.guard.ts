@@ -16,7 +16,11 @@ import { CHECK_POLICIES_KEY } from '../constants'
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
-  constructor(private caslAbilityFactory: CaslAbilityFactory, private reflector: Reflector, private moduleRef: ModuleRef) {}
+  constructor(
+    private caslAbilityFactory: CaslAbilityFactory,
+    private reflector: Reflector,
+    private moduleRef: ModuleRef
+  ) {}
 
   async canActivate(ctx: ExecutionContext) {
     const policiesHandlersRef = this.reflector.get<Type<PolicyHandler>[]>(CHECK_POLICIES_KEY, ctx.getHandler()) || []
@@ -39,7 +43,7 @@ export class PoliciesGuard implements CanActivate {
       policyHandlers.push(policyHandler)
     }
 
-    const { user } = ctx.switchToHttp().getRequest<Request>()
+    const { user }: any = ctx.switchToHttp().getRequest<Request>()
     if (!user) return false
 
     const ability = this.caslAbilityFactory.createForUser(user)

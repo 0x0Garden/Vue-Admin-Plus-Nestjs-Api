@@ -10,6 +10,7 @@ import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 
 import { UserService } from '@/user/user.service'
+import { BcryptService } from '@/shared/services/bcrypt.service'
 import { UserEntity } from '@/user/entities/user.entity'
 import { LoginUserDto } from '@/user/dto'
 import { JwtPayload, FullJwtPayload, UserEntityHasToken } from '@/auth/dtos'
@@ -23,7 +24,11 @@ interface ValidateUser extends ServiceRO {
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+    private readonly bcryptService: BcryptService
+  ) {}
   /**
    * 验证用户
    * @param username
@@ -31,7 +36,8 @@ export class AuthService {
    */
   async validateUser({ username, password }: LoginUserDto): Promise<ValidateUser> {
     const user = await this.userService.findByUsername(username)
-    return user && user.password === password
+    const isEqualPwd = await this.bcryptService.compare(password, user.password)
+    return user && isEqualPwd
       ? {
           code: StatusCode.SUCCESS,
           data: user
@@ -64,9 +70,6 @@ export class AuthService {
       // 从 jwtPayload 获取生成 jwt token 生成的时间戳
       // 如果在快过期的五分钟时间段内，则生成新的 jwt token
       const limitTimeMap = 60 * 5
-      // if (jwtPayload.iat + limitTimeMap >= jwtPayload.exp) {
-      //   data.token = await this.certificate(user)
-      // }
       if (jwtPayload.exp - Math.round(new Date().valueOf() / 1000) <= limitTimeMap) {
         data.token = await this.certificate(user)
       }

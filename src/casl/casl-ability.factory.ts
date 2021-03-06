@@ -20,16 +20,16 @@ export type AppAbility = Ability<[Action, Subjects]>
 @Injectable()
 export class CaslAbilityFactory {
   // todo createForUser(user: UserEntity)
-  createForUser(user: any) {
+  createForUser(user: UserEntity) {
     const { can, cannot, build } = new AbilityBuilder<Ability<[Action, Subjects]>>(Ability as AbilityClass<AppAbility>)
 
     if (user.role === Role.Admin) {
       can(Action.MANAGE, 'all')
     } else {
       // can(Action.READ, Post)
-      // can(Action.UPDATE, User, { id: user.id })
-      // can(Action.READ, User, { id: user.id })
-      // can(Action.READ, User, { login: user.login })
+      can(Action.UPDATE, UserEntity, { id: user.id })
+      can(Action.READ, UserEntity, { id: user.id })
+      can(Action.READ, UserEntity, { username: user.username })
       // can(Action.CREATE, Post)
       // cannot(Action.DELETE, Post)
       //
