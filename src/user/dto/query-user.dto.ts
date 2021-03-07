@@ -11,12 +11,6 @@ import { ValidateIf, IsInt } from 'class-validator'
 
 export class QueryUserDto {
   @ApiProperty({
-    type: String,
-    description: '用户账号'
-  })
-  readonly username?: string
-
-  @ApiProperty({
     type: Number,
     description: '页码'
   })
@@ -30,14 +24,29 @@ export class QueryUserDto {
     description: '条数'
   })
   @Type(() => Number)
-  @ValidateIf(o => o.currentPage)
+  @ValidateIf(o => o.pageSize)
   @IsInt()
   readonly pageSize?: number
 
   @ApiProperty({
     type: String,
+    description: '用户账号'
+  })
+  @ValidateIf(o => o.username)
+  readonly username?: string
+
+  @ApiProperty({
+    type: Number,
+    description: '用户状态'
+  })
+  @Type(() => Number)
+  @ValidateIf(o => o.isActive)
+  readonly isActive?: number
+
+  @ApiProperty({
+    type: String,
     description: '排序的方式: ASC, DESC'
   })
-  @ValidateIf(o => o.sortKey)
+  @ValidateIf(o => o.order)
   readonly order?: 'DESC' | 'ASC'
 }

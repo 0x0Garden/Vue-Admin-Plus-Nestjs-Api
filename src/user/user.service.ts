@@ -9,6 +9,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { isBoolean } from 'class-validator'
 
 import { BcryptService } from '@/shared/services/bcrypt.service'
 import { CreateUserDto, QueryUserDto } from './dto'
@@ -64,21 +65,25 @@ export class UserService {
   /**
    * 查找用户
    */
-  async filterAndPageQuery({ pageSize = 10, currentPage = 1, order = 'DESC' }: QueryUserDto): Promise<PaginationRO> {
+  async filterAndPageQuery({
+    pageSize = 10,
+    currentPage = 1,
+    username = '',
+    isActive = 3,
+    order = 'DESC'
+  }: QueryUserDto): Promise<PaginationRO> {
     const skippedItems: number = pageSize * (currentPage - 1)
 
-    const totalCount: number = await this.userRepository.count()
+    const queryBuilder = await this.userRepository.createQueryBuilder('user')
+    queryBuilder.where('user.username like :username', { username: `${username}%` })
+    if (isActive !== 3) queryBuilder.andWhere('user.isActive = :isActive', { isActive })
+    queryBuilder.orderBy('created_time', order).skip(skippedItems).take(pageSize)
 
-    const users: UserEntity[] = await this.userRepository
-      .createQueryBuilder('user')
-      .orderBy('created_time', order)
-      // .where(username as Partial<UserEntity>)
-      .skip(skippedItems)
-      .take(pageSize)
-      .getMany()
+    const totalCount: number = await queryBuilder.getCount()
+    const users: UserEntity[] = await queryBuilder.getMany()
 
     return {
-      totalCount,
+      totalCount: totalCount,
       totalPage: Math.ceil(totalCount / pageSize),
       currentPage: currentPage,
       pageSize: pageSize,
