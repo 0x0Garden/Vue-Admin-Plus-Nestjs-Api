@@ -11,12 +11,12 @@ import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
 
 import { UserService } from './user.service'
 import { UserEntity } from '@/user/entities/user.entity'
-import { CreateUserDto, QueryUserDto } from './dto'
+import { CreateUserDto, QueryUserDto, RemoveUserDto } from './dto'
 import { Acl } from '@/casl/decorators/acl.decorator'
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'
 import { User } from '@/auth/decorators'
-import { CheckPolicies } from '@/casl/decorators/check-policies.decorator'
-import { CreateUserPolicyHandler } from '@/casl/policies/user/create-user-policy.handler'
+// import { CheckPolicies } from '@/casl/decorators/check-policies.decorator'
+// import { CreateUserPolicyHandler } from '@/casl/policies/user/create-user-policy.handler'
 import { Public } from '@/auth/decorators/public.decorator'
 import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
 import { StatusCode } from '@/utils/enum/code.enum'
@@ -59,6 +59,13 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') username: string): Promise<UserEntity> {
     return this.userService.findByUsername(username)
+  }
+
+  @ApiOperation({ summary: '根据多个用户编号删除用户' })
+  @Delete('list')
+  async removeList(@Body() removeUserDto: RemoveUserDto, @User() user): Promise<ResponseGenerator> {
+    const data = await this.userService.removeList(removeUserDto)
+    return ResponseResult.success(data, '删除成功！', user)
   }
 
   @ApiOperation({ summary: '根据用户编号删除用户' })

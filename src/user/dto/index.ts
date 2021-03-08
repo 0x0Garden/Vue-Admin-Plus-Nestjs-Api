@@ -9,3 +9,4 @@
 export { CreateUserDto } from './create-user.dto'
 export { LoginUserDto } from './login-user.dto'
 export { QueryUserDto } from './query-user.dto'
+export { RemoveUserDto } from './remove-user.dto'

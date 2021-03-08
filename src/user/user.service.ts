@@ -9,10 +9,9 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { isBoolean } from 'class-validator'
 
 import { BcryptService } from '@/shared/services/bcrypt.service'
-import { CreateUserDto, QueryUserDto } from './dto'
+import { CreateUserDto, QueryUserDto, RemoveUserDto } from './dto'
 import { UserEntity } from '@/user/entities/user.entity'
 import { PaginationRO, ServiceRO } from '@/utils/response.result'
 import { StatusCode } from '@/utils/enum/code.enum'
@@ -113,5 +112,14 @@ export class UserService {
    */
   async remove(id: string): Promise<void> {
     await this.userRepository.delete(id)
+  }
+
+  /**
+   * 删除用户
+   * @param list
+   */
+  async removeList({ list }: RemoveUserDto): Promise<void> {
+    console.log('list', list)
+    await this.userRepository.delete(list)
   }
 }
