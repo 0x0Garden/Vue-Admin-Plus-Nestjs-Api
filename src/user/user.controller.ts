@@ -15,8 +15,9 @@ import { CreateUserDto, QueryUserDto, RemoveUserDto } from './dto'
 import { Acl } from '@/casl/decorators/acl.decorator'
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'
 import { User } from '@/auth/decorators'
-// import { CheckPolicies } from '@/casl/decorators/check-policies.decorator'
+import { CheckPolicies } from '@/casl/decorators/check-policies.decorator'
 // import { CreateUserPolicyHandler } from '@/casl/policies/user/create-user-policy.handler'
+import { RemoveUserPolicyHandler } from '@/casl/policies/user/remove-user-policy.handler'
 import { Public } from '@/auth/decorators/public.decorator'
 import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
 import { StatusCode } from '@/utils/enum/code.enum'
@@ -69,6 +70,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '根据用户编号删除用户' })
+  @CheckPolicies(RemoveUserPolicyHandler)
   @Delete(':id')
   async remove(@Param('id') id: string, @User() user): Promise<ResponseGenerator> {
     const data = await this.userService.remove(id)

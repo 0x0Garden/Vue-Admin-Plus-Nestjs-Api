@@ -10,5 +10,10 @@ import { Provider } from '@nestjs/common'
 
 import { CreateUserPolicyProvider } from './create-user-policy.provider'
 import { SearchUserPolicyProvider } from './search-user-policy.provider'
+import { RemoveUserPolicyProvider } from './remove-user-policy.provider'
 
-export const userPolicyProviders: Provider[] = [CreateUserPolicyProvider, SearchUserPolicyProvider]
+export const userPolicyProviders: Provider[] = [
+  CreateUserPolicyProvider,
+  SearchUserPolicyProvider,
+  RemoveUserPolicyProvider
+]
