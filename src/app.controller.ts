@@ -38,7 +38,7 @@ export class AppController {
         data = ResponseResult.success(await this.authService.loginUserData(authResult.data, token), '登录成功')
         break
       case 400:
-        data = ResponseResult.fail(StatusCode.BUSINESS_FAIL, '登录失败，请检查用户名或者密码是否正确！')
+        data = ResponseResult.fail(StatusCode.BUSINESS_FAIL, '登录失败，用户不存在或者密码不正确！')
         break
       default:
         data = ResponseResult.fail(StatusCode.TIMEOUT, '未知错误')

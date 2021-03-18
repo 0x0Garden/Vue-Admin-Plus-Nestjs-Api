@@ -36,8 +36,15 @@ export class AuthService {
    */
   async validateUser({ username, password }: LoginUserDto): Promise<ValidateUser> {
     const user = await this.userService.findByUsername(username)
+    // 没有找到用户
+    if (user === null) {
+      return {
+        code: StatusCode.BUSINESS_FAIL,
+        data: null
+      }
+    }
     const isEqualPwd = await this.bcryptService.compare(password, user.password)
-    return user && isEqualPwd
+    return isEqualPwd
       ? {
           code: StatusCode.SUCCESS,
           data: user
