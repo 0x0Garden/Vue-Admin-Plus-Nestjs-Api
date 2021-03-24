@@ -6,26 +6,17 @@
  * 创建作者：Jaxson
  */
 
-import { Entity, Column, PrimaryColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { v4 as guid } from 'uuid'
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Exclude } from 'class-transformer'
 
 import { Role } from '../enums/role.enum'
 
 @Entity('user')
 export class UserEntity {
-  @PrimaryColumn({
-    type: 'varchar',
-    length: 36,
-    nullable: false,
-    unique: true,
+  @PrimaryGeneratedColumn('uuid', {
     comment: '用户编号'
   })
   id: string
-
-  @BeforeInsert()
-  updateId(): void {
-    this.id = guid()
-  }
 
   @Column({
     type: 'varchar',

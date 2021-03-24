@@ -10,14 +10,12 @@ import { IsNotEmpty } from 'class-validator'
 
 export class LoginUserDto {
   @ApiProperty({
-    type: String,
     description: '用户账号'
   })
   @IsNotEmpty()
   readonly username: string
 
   @ApiProperty({
-    type: String,
     description: '用户密码'
   })
   @IsNotEmpty()

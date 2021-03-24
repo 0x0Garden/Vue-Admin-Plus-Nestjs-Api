@@ -6,24 +6,14 @@
  * 创建作者：Jaxson
  */
 
-import { BeforeInsert, Column, Entity, PrimaryColumn } from 'typeorm'
-import { v4 as guid } from 'uuid'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity('route')
 export class RouteEntity {
-  @PrimaryColumn({
-    type: 'varchar',
-    length: 36,
-    nullable: false,
-    unique: true,
-    comment: '路由编号'
+  @PrimaryGeneratedColumn('uuid', {
+    comment: '用户编号'
   })
   id: string
-
-  @BeforeInsert()
-  updateId(): void {
-    this.id = guid()
-  }
 
   @Column({
     comment: '路由名称'

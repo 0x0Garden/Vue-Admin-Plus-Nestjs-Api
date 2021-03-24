@@ -10,7 +10,6 @@ import { IsNotEmpty } from 'class-validator'
 
 export class RemoveUserDto {
   @ApiProperty({
-    type: Array,
     description: '用户编号列表'
   })
   @IsNotEmpty()

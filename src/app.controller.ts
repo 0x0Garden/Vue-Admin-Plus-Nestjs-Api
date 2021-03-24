@@ -50,7 +50,6 @@ export class AppController {
   @Get('getInfo')
   async getInfo(@Request() req): Promise<ResponseGenerator> {
     const data: UserEntityHasToken = req.user
-    if (data.token) delete data.token
     return ResponseResult.success(data, '获取成功')
   }
 }
