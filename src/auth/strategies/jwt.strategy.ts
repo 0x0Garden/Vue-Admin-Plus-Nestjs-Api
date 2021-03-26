@@ -2,7 +2,7 @@
  * Copyright (c) 2021 Jaxson
  * 项目名称：Vue-Admin-Plus-Nestjs-Api
  * 文件名称：jwt.strategy.ts
- * 创建日期：2021年02月22日
+ * 创建日期：2021年03月26日
  * 创建作者：Jaxson
  */
 
@@ -21,12 +21,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get('jwt.secret')
+      secretOrKey: configService.get<string>('jwt.secret')
     })
   }
 
   async validate(fullJwtPayload: FullJwtPayload): Promise<UserEntity> {
-    // const { exp, iat, ...payload } = fullJwtPayload
     const user = await this.authService.retrieveUserFromJwt(fullJwtPayload)
     if (!user) {
       throw new UnauthorizedException()

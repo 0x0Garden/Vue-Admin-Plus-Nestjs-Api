@@ -6,18 +6,20 @@
  * 创建作者：Jaxson
  */
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsString } from 'class-validator'
 
 export class LoginUserDto {
   @ApiProperty({
     description: '用户账号'
   })
+  @IsString()
   @IsNotEmpty()
   readonly username: string
 
   @ApiProperty({
     description: '用户密码'
   })
+  @IsString()
   @IsNotEmpty()
   readonly password: string
 }

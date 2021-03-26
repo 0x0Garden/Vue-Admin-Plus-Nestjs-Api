@@ -6,4 +6,4 @@
  * 创建作者：Jaxson
  */
 
-export { IS_PUBLIC_KEY, Public } from './public.decorator'
+export { User } from './user.decorator'

@@ -2,7 +2,7 @@
  * Copyright (c) 2021 Jaxson
  * 项目名称：Vue-Admin-Plus-Nestjs-Api
  * 文件名称：auth.service.ts
- * 创建日期：2021年02月22日
+ * 创建日期：2021年03月26日
  * 创建作者：Jaxson
  */
 
@@ -36,23 +36,23 @@ export class AuthService {
    */
   async validateUser({ username, password }: LoginUserDto): Promise<ValidateUser> {
     const user = await this.userService.findByUsername(username)
-    // 没有找到用户
-    if (user === null) {
-      return {
-        code: StatusCode.BUSINESS_FAIL,
-        data: null
-      }
+    if (user) {
+      const isEqualPwd = await this.bcryptService.compare(password, user.password)
+      return isEqualPwd
+        ? {
+            code: StatusCode.SUCCESS,
+            data: user
+          }
+        : {
+            code: StatusCode.BUSINESS_FAIL,
+            data: null
+          }
     }
-    const isEqualPwd = await this.bcryptService.compare(password, user.password)
-    return isEqualPwd
-      ? {
-          code: StatusCode.SUCCESS,
-          data: user
-        }
-      : {
-          code: StatusCode.BUSINESS_FAIL,
-          data: null
-        }
+    // 没有找到用户
+    return {
+      code: StatusCode.BUSINESS_FAIL,
+      data: null
+    }
   }
   /**
    * 向用户颁发 JWT

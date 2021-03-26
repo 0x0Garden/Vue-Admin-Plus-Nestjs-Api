@@ -6,47 +6,43 @@
  * 创建作者：Jaxson
  */
 
-import { Injectable, CanActivate, ExecutionContext, Type, Scope } from '@nestjs/common'
-import { ContextIdFactory, ModuleRef, Reflector } from '@nestjs/core'
-import { Request } from 'express'
+import { Injectable, CanActivate, ExecutionContext, SetMetadata } from '@nestjs/common'
+import { Reflector } from '@nestjs/core'
 
-import { CaslAbilityFactory } from '../casl-ability.factory'
-import { PolicyHandler } from '../policies/policy-handler.interface'
-import { CHECK_POLICIES_KEY } from '../constants'
+import { AppAbility, CaslAbilityFactory } from '../casl-ability.factory'
+
+interface IPolicyHandler {
+  handle(ability: AppAbility): boolean
+}
+
+type PolicyHandlerCallback = (ability: AppAbility) => boolean
+
+export type PolicyHandler = IPolicyHandler | PolicyHandlerCallback
+
+export const CHECK_POLICIES_KEY = 'check_policy'
+
+export const CheckPolicies = (...handlers: PolicyHandler[]) => SetMetadata(CHECK_POLICIES_KEY, handlers)
 
 @Injectable()
 export class PoliciesGuard implements CanActivate {
-  constructor(
-    private caslAbilityFactory: CaslAbilityFactory,
-    private reflector: Reflector,
-    private moduleRef: ModuleRef
-  ) {}
+  constructor(private caslAbilityFactory: CaslAbilityFactory, private reflector: Reflector) {}
 
-  async canActivate(ctx: ExecutionContext) {
-    const policiesHandlersRef = this.reflector.get<Type<PolicyHandler>[]>(CHECK_POLICIES_KEY, ctx.getHandler()) || []
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const policyHandlers = this.reflector.get<PolicyHandler[]>(CHECK_POLICIES_KEY, context.getHandler()) || []
 
-    if (policiesHandlersRef.length === 0) return true
+    const user = context.switchToHttp().getRequest()?.user
+    const ability = this.caslAbilityFactory.createForUser(user)
 
-    const contextId = ContextIdFactory.create()
-    this.moduleRef.registerRequestByContextId(ctx.switchToHttp().getRequest(), contextId)
+    return policyHandlers.every(handler => {
+      return PoliciesGuard.execPolicyHandler(handler, ability)
+    })
+  }
 
-    const policyHandlers: PolicyHandler[] = []
-    for (let i = 0; i < policiesHandlersRef.length; i++) {
-      const policyHandlerRef = policiesHandlersRef[i]
-      const policyScope = this.moduleRef.introspect(policyHandlerRef).scope
-      let policyHandler: PolicyHandler
-      if (policyScope === Scope.DEFAULT) {
-        policyHandler = this.moduleRef.get(policyHandlerRef, { strict: false })
-      } else {
-        policyHandler = await this.moduleRef.resolve(policyHandlerRef, contextId, { strict: false })
-      }
-      policyHandlers.push(policyHandler)
+  private static execPolicyHandler(handler: PolicyHandler, ability: AppAbility) {
+    if (typeof handler === 'function') {
+      return handler(ability)
     }
 
-    const { user }: any = ctx.switchToHttp().getRequest<Request>()
-    if (!user) return false
-
-    const ability = this.caslAbilityFactory.createForUser(user)
-    return policyHandlers.every(handler => handler.handle(ability))
+    return handler.handle(ability)
   }
 }

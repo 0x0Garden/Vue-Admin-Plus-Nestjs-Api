@@ -2,17 +2,17 @@
  * Copyright (c) 2021 Jaxson
  * 项目名称：Vue-Admin-Plus-Nestjs-Api
  * 文件名称：user.entity.ts
- * 创建日期：2021年03月02日
+ * 创建日期：2021年03月26日
  * 创建作者：Jaxson
  */
 
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 import { Exclude } from 'class-transformer'
 
-import { Role } from '../enums/role.enum'
+import { Role } from '@/user/enums/role.enum'
 
 @Entity('user')
-export class UserEntity {
+export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid', {
     comment: '用户编号'
   })
@@ -26,6 +26,7 @@ export class UserEntity {
   })
   username: string
 
+  @Exclude()
   @Column({
     type: 'varchar',
     length: 200,

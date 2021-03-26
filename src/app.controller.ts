@@ -6,15 +6,21 @@
  * 创建作者：Jaxson
  */
 
-import { Controller, Get, Post, Body, Request } from '@nestjs/common'
-import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger'
+import { Controller, Get, Post, Body, Request, UseGuards } from '@nestjs/common'
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiCreatedResponse, ApiUnauthorizedResponse } from '@nestjs/swagger'
 
+import { LocalAuthGuard } from '@/auth/guards/local-auth.guard'
 import { AuthService } from '@/auth/auth.service'
 import { LoginUserDto } from '@/user/dto'
 import { Public } from '@/auth/decorators/public.decorator'
 import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
 import { StatusCode } from '@/utils/enum/code.enum'
 import { UserEntityHasToken } from '@/auth/dtos'
+
+import { UserEntity } from '@/user/entities/user.entity'
+import { Action } from '@/casl/enums/action.enum'
+import { CheckPolicies, PoliciesGuard } from '@/casl/guards/policies.guard'
+import { AppAbility } from '@/casl/casl-ability.factory'
 
 @ApiBearerAuth()
 @ApiTags('全局')
@@ -27,6 +33,9 @@ export class AppController {
    * @param loginUser
    */
   @ApiOperation({ summary: '系统登录接口' })
+  @ApiCreatedResponse({ description: '登录成功' })
+  @ApiUnauthorizedResponse({ description: '未经授权' })
+  @UseGuards(LocalAuthGuard)
   @Public()
   @Post('login')
   async login(@Body() loginUser: LoginUserDto): Promise<ResponseGenerator> {
@@ -47,6 +56,8 @@ export class AppController {
   }
 
   @ApiOperation({ summary: '获取用户信息' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.READ, UserEntity))
   @Get('getInfo')
   async getInfo(@Request() req): Promise<ResponseGenerator> {
     const data: UserEntityHasToken = req.user
