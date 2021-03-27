@@ -47,11 +47,19 @@ export class UserController {
 
   @ApiOperation({ summary: '查询所有用户信息列表' })
   @UseGuards(PoliciesGuard)
-  @CheckPolicies((ability: AppAbility) => ability.can(Action.LIST, UserEntity))
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.List, UserEntity))
   @Get()
   async findAll(@Query() queryUserDto: QueryUserDto, @User() user): Promise<ResponseGenerator> {
     const data = await this.userService.filterAndPageQuery(queryUserDto)
     return ResponseResult.success(data, '获取成功', user)
+  }
+
+  @ApiOperation({ summary: '获取当前登录用户信息' })
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Read, UserEntity))
+  @Get('getInfo')
+  async getInfo(@User() user: UserEntity): Promise<ResponseGenerator> {
+    return ResponseResult.success(user, '查询成功')
   }
 
   @ApiOperation({ summary: '根据用户编号查询用户信息' })
@@ -60,7 +68,7 @@ export class UserController {
     const foundUser = await this.userService.findById(id)
     const ability = this.caslAbilityFactory.createForUser(user)
 
-    if (ability.can(Action.READ, foundUser)) {
+    if (ability.can(Action.Read, foundUser)) {
       return ResponseResult.success(foundUser, '查询成功')
     } else {
       throw new ForbiddenException()
@@ -69,7 +77,7 @@ export class UserController {
 
   @ApiOperation({ summary: '根据多个用户编号删除用户' })
   @UseGuards(PoliciesGuard)
-  @CheckPolicies((ability: AppAbility) => ability.can(Action.DELETE, UserEntity))
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Delete, UserEntity))
   @Delete('list')
   async removeList(@Body() removeUserDto: RemoveUserDto, @User() user): Promise<ResponseGenerator> {
     const data = await this.userService.removeList(removeUserDto)
@@ -78,7 +86,7 @@ export class UserController {
 
   @ApiOperation({ summary: '根据用户编号删除用户' })
   @UseGuards(PoliciesGuard)
-  @CheckPolicies((ability: AppAbility) => ability.can(Action.DELETE, UserEntity))
+  @CheckPolicies((ability: AppAbility) => ability.can(Action.Delete, UserEntity))
   @Delete(':id')
   async remove(@Param('id') id: string, @User() user): Promise<ResponseGenerator> {
     const data = await this.userService.remove(id)

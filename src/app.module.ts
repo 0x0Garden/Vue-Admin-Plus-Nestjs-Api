@@ -2,11 +2,9 @@
  * Copyright (c) 2021 Jaxson
  * 项目名称：Vue-Admin-Plus-Nestjs-Api
  * 文件名称：app.module.ts
- * 创建日期：2021年03月26日
+ * 创建日期：2021年03月27日
  * 创建作者：Jaxson
  */
-
-import { Connection } from 'typeorm'
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule, ConfigService } from '@nestjs/config'
@@ -31,11 +29,9 @@ import { AuthModule } from '@/auth/auth.module'
       inject: [ConfigService]
     }),
     AuthModule,
-    CaslModule,
-    UserModule
+    UserModule,
+    CaslModule
   ],
   controllers: [AppController]
 })
-export class AppModule {
-  constructor(private connection: Connection) {}
-}
+export class AppModule {}

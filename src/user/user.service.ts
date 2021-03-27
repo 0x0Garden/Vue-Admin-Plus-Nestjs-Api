@@ -65,17 +65,17 @@ export class UserService {
    * 查找用户
    */
   async filterAndPageQuery({
-    pageSize = 10,
-    currentPage = 1,
-    username = '',
-    isActive = 3,
-    order = 'DESC'
+    pageSize,
+    currentPage,
+    username,
+    activeStatus,
+    order
   }: QueryUserDto): Promise<PaginationRO> {
     const skippedItems: number = pageSize * (currentPage - 1)
 
     const queryBuilder = await this.userRepository.createQueryBuilder('user')
-    queryBuilder.where('user.username like :username', { username: `${username}%` })
-    if (isActive !== 3) queryBuilder.andWhere('user.isActive = :isActive', { isActive })
+    if (username !== '') queryBuilder.where('user.username like :username', { username: `${username}%` })
+    if (activeStatus !== 3) queryBuilder.andWhere('user.isActive = :activeStatus', { activeStatus })
     queryBuilder.orderBy('created_time', order).skip(skippedItems).take(pageSize)
 
     const totalCount: number = await queryBuilder.getCount()
@@ -119,7 +119,6 @@ export class UserService {
    * @param list
    */
   async removeList({ list }: RemoveUserDto): Promise<void> {
-    console.log('list', list)
     await this.userRepository.delete(list)
   }
 }

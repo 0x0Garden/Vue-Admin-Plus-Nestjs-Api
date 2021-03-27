@@ -7,30 +7,26 @@
  */
 import { ApiProperty } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { ValidateIf, IsInt } from 'class-validator'
 
 export class QueryUserDto {
   @ApiProperty({
+    required: false,
     description: '页码'
   })
   @Type(() => Number)
-  @ValidateIf(o => o.currentPage)
-  @IsInt()
-  readonly currentPage?: number
+  readonly currentPage: number = 1
 
   @ApiProperty({
+    required: false,
     description: '条数'
   })
   @Type(() => Number)
-  @ValidateIf(o => o.pageSize)
-  @IsInt()
-  readonly pageSize?: number
+  readonly pageSize: number = 10
 
   @ApiProperty({
     required: false,
     description: '用户账号'
   })
-  @ValidateIf(o => o.username)
   readonly username?: string
 
   @ApiProperty({
@@ -38,13 +34,11 @@ export class QueryUserDto {
     description: '用户状态'
   })
   @Type(() => Number)
-  @ValidateIf(o => o.isActive)
-  readonly isActive?: number
+  readonly activeStatus: number = 3
 
   @ApiProperty({
     required: false,
     description: '排序的方式: ASC, DESC'
   })
-  @ValidateIf(o => o.order)
-  readonly order?: 'DESC' | 'ASC'
+  readonly order: 'DESC' | 'ASC' = 'DESC'
 }

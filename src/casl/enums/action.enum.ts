@@ -7,10 +7,10 @@
  */
 
 export enum Action {
-  MANAGE = 'manage',
-  CREATE = 'create',
-  LIST = 'list',
-  READ = 'read',
-  UPDATE = 'update',
-  DELETE = 'delete'
+  Manage = 'manage',
+  Create = 'create',
+  List = 'list',
+  Read = 'read',
+  Update = 'update',
+  Delete = 'delete'
 }

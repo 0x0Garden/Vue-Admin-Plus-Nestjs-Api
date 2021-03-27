@@ -14,7 +14,6 @@ import { UserEntity } from '@/user/entities/user.entity'
 import { Role } from '@/user/enums/role.enum'
 
 type Subjects = InferSubjects<typeof UserEntity> | 'all'
-
 export type AppAbility = Ability<[Action, Subjects]>
 
 @Injectable()
@@ -23,17 +22,17 @@ export class CaslAbilityFactory {
     const { can, cannot, build } = new AbilityBuilder<Ability<[Action, Subjects]>>(Ability as AbilityClass<AppAbility>)
 
     if (user.role === Role.Admin) {
-      can(Action.MANAGE, 'all')
-      can(Action.LIST, 'all')
+      can(Action.Manage, 'all')
+      can(Action.List, 'all')
     }
 
-    can(Action.READ, UserEntity, { id: user.id })
-    can(Action.UPDATE, UserEntity, { id: user.id })
-    cannot(Action.DELETE, UserEntity, { role: Role.Admin })
+    can(Action.Read, UserEntity, { id: user.id })
+    can(Action.Update, UserEntity, { id: user.id })
+    cannot(Action.Delete, UserEntity, { role: Role.Admin })
 
     return build({
       // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types for details
-      detectSubjectType: item => item.constructor as ExtractSubjectType<Subjects>
+      detectSubjectType: object => object.constructor as ExtractSubjectType<Subjects>
     })
   }
 }
