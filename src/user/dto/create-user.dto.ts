@@ -6,34 +6,31 @@
  * 创建作者：Jaxson
  */
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsString, IsEmail } from 'class-validator'
+import { IsNotEmpty, IsEmail } from 'class-validator'
 
 export class CreateUserDto {
   @ApiProperty({
     description: '用户账号'
   })
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: '用户账号不得为空' })
   readonly username: string
 
   @ApiProperty({
     description: '用户密码'
   })
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: '用户密码不得为空' })
   readonly password: string
 
   @ApiProperty({
     description: '用户邮箱'
   })
-  @IsNotEmpty()
-  @IsEmail()
+  @IsNotEmpty({ message: '用户邮箱不得为空' })
+  @IsEmail({ allow_display_name: true }, { message: '用户邮箱格式不规范' })
   readonly email: string
 
   @ApiProperty({
     description: '用户昵称'
   })
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: '用户昵称不得为空' })
   readonly nickname: string
 }

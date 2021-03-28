@@ -12,14 +12,14 @@ export class LoginUserDto {
   @ApiProperty({
     description: '用户账号'
   })
-  @IsNotEmpty({ message: '请输入登录账号！' })
+  @IsNotEmpty({ message: '用户账号不得为空' })
   @IsString()
   readonly username: string
 
   @ApiProperty({
     description: '用户密码'
   })
-  @IsNotEmpty({ message: '请输入登录密码！' })
+  @IsNotEmpty({ message: '用户密码不得为空' })
   @IsString()
   readonly password: string
 }

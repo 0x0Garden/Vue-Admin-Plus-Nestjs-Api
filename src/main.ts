@@ -5,8 +5,8 @@
  * 创建日期：2021年03月27日
  * 创建作者：Jaxson
  */
-import { NestFactory, Reflector } from '@nestjs/core'
-import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
+import { Logger } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
 import { AppModule } from '@/app.module'
@@ -17,12 +17,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
   app.setGlobalPrefix('api')
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true
-    })
-  )
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
   app.enableCors() // 启用允许跨域
 
   const config = new DocumentBuilder()

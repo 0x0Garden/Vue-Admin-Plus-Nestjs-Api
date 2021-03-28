@@ -23,11 +23,11 @@ export class CaslAbilityFactory {
 
     if (user.role === Role.Admin) {
       can(Action.Manage, 'all')
-      can(Action.List, 'all')
     }
 
     can(Action.Read, UserEntity, { id: user.id })
     can(Action.Update, UserEntity, { id: user.id })
+    // can(Action.List, UserEntity, { id: user.id })
     cannot(Action.Delete, UserEntity, { role: Role.Admin })
 
     return build({

@@ -6,15 +6,18 @@
  * 创建作者：Jaxson
  */
 
-import { Injectable } from '@nestjs/common'
+import { Injectable, BadRequestException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { BcryptService } from '@/shared/services/bcrypt.service'
 import { CreateUserDto, QueryUserDto, RemoveUserDto } from './dto'
 import { UserEntity } from '@/user/entities/user.entity'
-import { PaginationRO, ServiceRO } from '@/utils/response.result'
-import { StatusCode } from '@/utils/enum/code.enum'
+import { PaginationRO } from '@/utils/response.result'
+
+interface UserPaginationRO extends PaginationRO {
+  list: UserEntity[]
+}
 
 @Injectable()
 export class UserService {
@@ -28,7 +31,7 @@ export class UserService {
    * 用户创建
    * @param createUserDto
    */
-  async create(createUserDto: CreateUserDto): Promise<ServiceRO> {
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, password, email, nickname } = createUserDto
     // 检查身份用户名和邮箱是否存在
     const queryBuilderUser = await this.userRepository
@@ -37,9 +40,7 @@ export class UserService {
       .orWhere('user.email = :email', { email })
       .getOne()
     if (queryBuilderUser) {
-      return {
-        code: StatusCode.BUSINESS_FAIL
-      }
+      throw new BadRequestException('用户帐号或者用户邮箱重复，请重新再注册！')
     }
 
     const user = new UserEntity()
@@ -48,10 +49,7 @@ export class UserService {
     user.email = email
     user.nickname = nickname
 
-    return {
-      code: StatusCode.SUCCESS,
-      data: this.userRepository.save(user)
-    }
+    return this.userRepository.save(user)
   }
 
   /**
@@ -70,7 +68,7 @@ export class UserService {
     username,
     activeStatus,
     order
-  }: QueryUserDto): Promise<PaginationRO> {
+  }: QueryUserDto): Promise<UserPaginationRO> {
     const skippedItems: number = pageSize * (currentPage - 1)
 
     const queryBuilder = await this.userRepository.createQueryBuilder('user')
@@ -91,7 +89,7 @@ export class UserService {
   }
 
   /**
-   * 根据登录账号查询
+   * 根据用户帐号查询
    * @param username
    */
   async findByUsername(username: string): Promise<UserEntity> {

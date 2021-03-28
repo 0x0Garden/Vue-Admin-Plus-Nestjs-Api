@@ -7,7 +7,6 @@
  */
 
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { Exclude } from 'class-transformer'
 
 import { Role } from '@/user/enums/role.enum'
 
@@ -22,15 +21,15 @@ export class UserEntity extends BaseEntity {
     type: 'varchar',
     length: 50,
     unique: true,
-    comment: '登录用户'
+    comment: '用户帐号'
   })
   username: string
 
-  @Exclude()
   @Column({
     type: 'varchar',
     length: 200,
-    comment: '密码'
+    select: false,
+    comment: '用户密码'
   })
   password: string
 
@@ -38,12 +37,12 @@ export class UserEntity extends BaseEntity {
     type: 'varchar',
     length: 255,
     unique: true,
-    comment: '邮箱'
+    comment: '用户邮箱'
   })
   email: string
 
   @Column({
-    comment: '昵称'
+    comment: '用户昵称'
   })
   nickname: string
 
@@ -51,7 +50,7 @@ export class UserEntity extends BaseEntity {
     type: 'simple-enum',
     enum: Role,
     default: Role.User,
-    comment: '角色身份'
+    comment: '用户角色身份'
   })
   role: Role
 

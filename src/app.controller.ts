@@ -13,8 +13,7 @@ import { LocalAuthGuard } from '@/auth/guards/local-auth.guard'
 import { AuthService } from '@/auth/auth.service'
 import { LoginUserDto } from '@/user/dto'
 import { Public } from '@/auth/decorators/public.decorator'
-import { ResponseGenerator, ResponseResult } from '@/utils/response.result'
-import { StatusCode } from '@/utils/enum/code.enum'
+import { UserData } from '@/user/user.interface'
 
 @ApiTags('全局')
 @Controller()
@@ -33,20 +32,9 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Public()
   @Post('login')
-  async login(@Body() loginUser: LoginUserDto): Promise<ResponseGenerator> {
+  async login(@Body() loginUser: LoginUserDto): Promise<UserData> {
     const authResult = await this.authService.validateUser(loginUser)
-    let data: ResponseGenerator
-    switch (authResult.code) {
-      case 200:
-        const token = await this.authService.certificate(authResult.data)
-        data = ResponseResult.success(await this.authService.loginUserData(authResult.data, token), '登录成功')
-        break
-      case 400:
-        data = ResponseResult.fail(StatusCode.BUSINESS_FAIL, '登录失败，用户不存在或者密码不正确！')
-        break
-      default:
-        data = ResponseResult.fail(StatusCode.TIMEOUT, '未知错误')
-    }
-    return data
+    const token = await this.authService.certificate(authResult)
+    return await this.authService.loginUserData(authResult, token)
   }
 }

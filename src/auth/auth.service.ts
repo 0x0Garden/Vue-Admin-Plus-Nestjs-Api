@@ -6,8 +6,9 @@
  * 创建作者：Jaxson
  */
 
-import { Injectable } from '@nestjs/common'
+import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { getRepository } from 'typeorm'
 
 import { UserService } from '@/user/user.service'
 import { BcryptService } from '@/shared/services/bcrypt.service'
@@ -15,12 +16,6 @@ import { UserEntity } from '@/user/entities/user.entity'
 import { LoginUserDto } from '@/user/dto'
 import { JwtPayload, FullJwtPayload, UserEntityHasToken } from '@/auth/dtos'
 import { UserData } from '@/user/user.interface'
-import { StatusCode } from '@/utils/enum/code.enum'
-import { ServiceRO } from '@/utils/response.result'
-
-interface ValidateUser extends ServiceRO {
-  data: UserEntity | null
-}
 
 @Injectable()
 export class AuthService {
@@ -34,25 +29,16 @@ export class AuthService {
    * @param username
    * @param password
    */
-  async validateUser({ username, password }: LoginUserDto): Promise<ValidateUser> {
-    const user = await this.userService.findByUsername(username)
-    if (user) {
-      const isEqualPwd = await this.bcryptService.compare(password, user.password)
-      return isEqualPwd
-        ? {
-            code: StatusCode.SUCCESS,
-            data: user
-          }
-        : {
-            code: StatusCode.BUSINESS_FAIL,
-            data: null
-          }
-    }
-    // 没有找到用户
-    return {
-      code: StatusCode.BUSINESS_FAIL,
-      data: null
-    }
+  async validateUser({ username, password }: LoginUserDto): Promise<UserEntity> {
+    const user = await getRepository(UserEntity)
+      .createQueryBuilder('user')
+      .where('user.username = :username', { username })
+      .addSelect('user.password')
+      .getOne()
+    if (!user) throw new BadRequestException('找不到用户')
+    const isEqualPwd = await this.bcryptService.compare(password, user.password)
+    if (!isEqualPwd) throw new BadRequestException('用户密码错误')
+    return user
   }
   /**
    * 向用户颁发 JWT
@@ -72,21 +58,22 @@ export class AuthService {
    */
   async retrieveUserFromJwt(jwtPayload: FullJwtPayload): Promise<UserEntityHasToken | null> {
     const user: UserEntity = await this.userService.findById(jwtPayload.sub)
-    let data: UserEntityHasToken = user
+    const data: UserEntityHasToken = user
     if (user && user.username === jwtPayload.username) {
       // 从 jwtPayload 获取生成 jwt token 生成的时间戳
       // 如果在快过期的五分钟时间段内，则生成新的 jwt token
       const limitTimeMap = 60 * 5
       if (jwtPayload.exp - Math.round(new Date().valueOf() / 1000) <= limitTimeMap) {
+        console.log('开始生成新的 token')
         data.token = await this.certificate(user)
       }
     } else {
-      data = null
+      throw new UnauthorizedException()
     }
     return data
   }
   /**
-   * 返回用户登录信息
+   * 返回用户账号信息
    * @param user
    * @param token
    */
