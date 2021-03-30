@@ -6,20 +6,23 @@
  * 创建作者：Jaxson
  */
 import { ApiProperty } from '@nestjs/swagger'
+import { IsNotEmpty } from 'class-validator'
 import { Type } from 'class-transformer'
 
 export class QueryUserDto {
   @ApiProperty({
     required: false,
-    description: '页码'
+    description: '当前页码'
   })
+  @IsNotEmpty({ message: '当前页码不得为空' })
   @Type(() => Number)
   readonly currentPage: number = 1
 
   @ApiProperty({
     required: false,
-    description: '条数'
+    description: '每页条数'
   })
+  @IsNotEmpty({ message: '每页条数不得为空' })
   @Type(() => Number)
   readonly pageSize: number = 10
 
@@ -34,11 +37,13 @@ export class QueryUserDto {
     description: '用户状态'
   })
   @Type(() => Number)
-  readonly activeStatus: number = 3
+  @IsNotEmpty({ message: '用户状态不得为空' })
+  readonly activeStatus?: number = 3
 
   @ApiProperty({
     required: false,
-    description: '排序的方式: ASC, DESC'
+    description: '排序方式: ASC, DESC'
   })
-  readonly order: 'DESC' | 'ASC' = 'DESC'
+  @IsNotEmpty({ message: '排序方式不得为空' })
+  readonly order?: 'DESC' | 'ASC' = 'DESC'
 }

@@ -7,7 +7,7 @@
  */
 
 import { Controller, Post, Body, UseGuards } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger'
+import { ApiTags, ApiOperation, ApiConsumes } from '@nestjs/swagger'
 
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard'
 import { AuthService } from '@/auth/auth.service'
@@ -25,9 +25,6 @@ export class AppController {
    * @param loginUser
    */
   @ApiOperation({ summary: '系统登录接口' })
-  @ApiBody({
-    type: LoginUserDto
-  })
   @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
   @UseGuards(LocalAuthGuard)
   @Public()

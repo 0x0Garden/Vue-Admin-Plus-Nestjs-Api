@@ -11,7 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 import { BcryptService } from '@/shared/services/bcrypt.service'
-import { CreateUserDto, QueryUserDto, RemoveUserDto } from './dto'
+import { CreateUserDto, QueryUserDto, RemoveUserDto, UpdateUserDto } from './dto'
 import { UserEntity } from '@/user/entities/user.entity'
 import { PaginationRO } from '@/utils/response.result'
 
@@ -55,13 +55,6 @@ export class UserService {
   /**
    * 查找用户
    */
-  findAll(): Promise<UserEntity[]> {
-    return this.userRepository.find()
-  }
-
-  /**
-   * 查找用户
-   */
   async filterAndPageQuery({
     pageSize,
     currentPage,
@@ -89,19 +82,15 @@ export class UserService {
   }
 
   /**
-   * 根据用户帐号查询
-   * @param username
-   */
-  async findByUsername(username: string): Promise<UserEntity> {
-    return (await this.userRepository.findOne({ username })) || null
-  }
-
-  /**
    * 根据编码查询
    * @param id
    */
   findById(id: string): Promise<UserEntity> {
     return this.userRepository.findOne(id)
+  }
+
+  updateById(id: string, updateUserDto: UpdateUserDto): Promise<any> {
+    return this.userRepository.update(id, updateUserDto)
   }
 
   /**

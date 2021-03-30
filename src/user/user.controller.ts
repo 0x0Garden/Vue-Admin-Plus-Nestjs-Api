@@ -6,12 +6,12 @@
  * 创建作者：Jaxson
  */
 
-import { Controller, Get, Post, Delete, Param, Body, Query, UseGuards, ForbiddenException } from '@nestjs/common'
-import { ApiTags, ApiOperation } from '@nestjs/swagger'
+import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards, ForbiddenException } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger'
 
 import { UserService } from './user.service'
 import { UserEntity } from '@/user/entities/user.entity'
-import { CreateUserDto, QueryUserDto, RemoveUserDto } from './dto'
+import { CreateUserDto, QueryUserDto, RemoveUserDto, UpdateUserDto } from './dto'
 import { User } from '@/user/decorators'
 import { PaginationRO } from '@/utils/response.result'
 import { Action } from '@/casl/enums/action.enum'
@@ -20,6 +20,7 @@ import { CaslAbilityFactory } from '@/casl/casl-ability.factory'
 import { AppAbility } from '@/casl/casl-ability.factory'
 
 @ApiTags('用户管理')
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService, private readonly caslAbilityFactory: CaslAbilityFactory) {}
@@ -57,6 +58,14 @@ export class UserController {
     } else {
       throw new ForbiddenException()
     }
+  }
+
+  @ApiOperation({ summary: '用户全量更新' })
+  @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
+  @Put(':id')
+  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    console.log(id)
+    console.log(updateUserDto)
   }
 
   @ApiOperation({ summary: '根据多个用户编号删除用户' })
