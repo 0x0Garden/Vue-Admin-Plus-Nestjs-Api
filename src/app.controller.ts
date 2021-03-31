@@ -2,12 +2,12 @@
  * Copyright (c) 2021 Jaxson
  * 项目名称：Vue-Admin-Plus-Nestjs-Api
  * 文件名称：app.controller.ts
- * 创建日期：2021年02月22日
+ * 创建日期：2021年03月31日
  * 创建作者：Jaxson
  */
 
-import { Controller, Post, Body, UseGuards } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiConsumes } from '@nestjs/swagger'
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger'
 
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard'
 import { AuthService } from '@/auth/auth.service'
@@ -25,6 +25,7 @@ export class AppController {
    * @param loginUser
    */
   @ApiOperation({ summary: '系统登录接口' })
+  @ApiBody({ type: LoginUserDto })
   @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
   @UseGuards(LocalAuthGuard)
   @Public()

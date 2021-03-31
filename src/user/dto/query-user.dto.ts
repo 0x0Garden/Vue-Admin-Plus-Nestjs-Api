@@ -2,11 +2,11 @@
  * Copyright (c) 2021 Jaxson
  * 项目名称：Vue-Admin-Plus-Nestjs-Api
  * 文件名称：query-user.dto.ts
- * 创建日期：2021年03月02日
+ * 创建日期：2021年03月31日
  * 创建作者：Jaxson
  */
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty } from 'class-validator'
+import { ValidateIf, IsNotEmpty, IsBoolean } from 'class-validator'
 import { Type } from 'class-transformer'
 
 export class QueryUserDto {
@@ -30,15 +30,18 @@ export class QueryUserDto {
     required: false,
     description: '用户账号'
   })
+  @IsNotEmpty({ message: '用户账号不得为空' })
+  @ValidateIf(o => o.username)
   readonly username?: string
 
   @ApiProperty({
     required: false,
     description: '用户状态'
   })
-  @Type(() => Number)
-  @IsNotEmpty({ message: '用户状态不得为空' })
-  readonly activeStatus?: number = 3
+  @Type(() => Boolean)
+  @IsBoolean({ message: '用户状态类型为布尔值' })
+  @ValidateIf(o => o.isActive)
+  readonly isActive?: boolean
 
   @ApiProperty({
     required: false,

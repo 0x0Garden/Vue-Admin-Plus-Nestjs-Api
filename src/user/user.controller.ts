@@ -2,12 +2,12 @@
  * Copyright (c) 2021 Jaxson
  * 项目名称：Vue-Admin-Plus-Nestjs-Api
  * 文件名称：user.controller.ts
- * 创建日期：2021年03月26日
+ * 创建日期：2021年03月31日
  * 创建作者：Jaxson
  */
 
 import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards, ForbiddenException } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger'
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger'
 
 import { UserService } from './user.service'
 import { UserEntity } from '@/user/entities/user.entity'
@@ -26,6 +26,7 @@ export class UserController {
   constructor(private readonly userService: UserService, private readonly caslAbilityFactory: CaslAbilityFactory) {}
 
   @ApiOperation({ summary: '用户创建' })
+  @ApiBody({ type: CreateUserDto })
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return await this.userService.create(createUserDto)
@@ -61,6 +62,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '用户全量更新' })
+  @ApiBody({ type: UpdateUserDto })
   @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
   @Put(':id')
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -69,6 +71,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: '根据多个用户编号删除用户' })
+  @ApiBody({ type: RemoveUserDto })
   @UseGuards(PoliciesGuard)
   @CheckPolicies((ability: AppAbility) => ability.can(Action.Delete, UserEntity))
   @Delete('list')

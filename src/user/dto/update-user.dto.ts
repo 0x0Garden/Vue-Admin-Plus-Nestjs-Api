@@ -36,7 +36,7 @@ export class UpdateUserDto {
     description: '用户状态'
   })
   @IsNotEmpty({ message: '用户状态不得为空' })
-  @IsBoolean({ message: '用户状态值选项只能是布尔值' })
+  @IsBoolean({ message: '用户状态类型为布尔值' })
   @Type(() => Boolean)
   readonly isActive?: boolean = true
 }

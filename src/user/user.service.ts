@@ -59,14 +59,14 @@ export class UserService {
     pageSize,
     currentPage,
     username,
-    activeStatus,
+    isActive,
     order
   }: QueryUserDto): Promise<UserPaginationRO> {
     const skippedItems: number = pageSize * (currentPage - 1)
 
     const queryBuilder = await this.userRepository.createQueryBuilder('user')
-    if (username !== '') queryBuilder.where('user.username like :username', { username: `${username}%` })
-    if (activeStatus !== 3) queryBuilder.andWhere('user.isActive = :activeStatus', { activeStatus })
+    if (username) queryBuilder.where('user.username like :username', { username: `${username}%` })
+    if (isActive) queryBuilder.andWhere('user.isActive = :isActive', { isActive })
     queryBuilder.orderBy('created_time', order).skip(skippedItems).take(pageSize)
 
     const totalCount: number = await queryBuilder.getCount()
