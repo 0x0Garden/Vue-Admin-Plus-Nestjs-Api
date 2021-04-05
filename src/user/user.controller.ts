@@ -65,9 +65,8 @@ export class UserController {
   @ApiBody({ type: UpdateUserDto })
   @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
   @Put(':id')
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    console.log(id)
-    console.log(updateUserDto)
+  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.updateById(id, updateUserDto)
   }
 
   @ApiOperation({ summary: '根据多个用户编号删除用户' })

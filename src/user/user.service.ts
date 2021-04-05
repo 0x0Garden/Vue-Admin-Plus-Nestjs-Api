@@ -89,8 +89,16 @@ export class UserService {
     return this.userRepository.findOne(id)
   }
 
-  updateById(id: string, updateUserDto: UpdateUserDto): Promise<any> {
-    return this.userRepository.update(id, updateUserDto)
+  async updateById(id: string, updateUserDto: UpdateUserDto): Promise<any> {
+    try {
+      return await this.userRepository.update(id, updateUserDto)
+    } catch (error) {
+      if (error.errno === 1062) {
+        throw new BadRequestException('用户帐号或者用户邮箱重复，请重新再注册！')
+      } else {
+        throw new BadRequestException(error)
+      }
+    }
   }
 
   /**
