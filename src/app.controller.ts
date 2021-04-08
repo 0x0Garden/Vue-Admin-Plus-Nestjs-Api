@@ -6,7 +6,7 @@
  * 创建作者：Jaxson
  */
 
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common'
+import { Controller, Post, Body, UseGuards } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger'
 
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard'

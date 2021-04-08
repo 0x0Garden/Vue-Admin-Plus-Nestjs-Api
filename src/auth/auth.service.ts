@@ -36,6 +36,7 @@ export class AuthService {
       .addSelect('user.password')
       .getOne()
     if (!user) throw new BadRequestException('找不到用户')
+    if (!user.isActive) throw new BadRequestException('该用户处于禁封状态，请联系管理员！')
     const isEqualPwd = await this.bcryptService.compare(password, user.password)
     if (!isEqualPwd) throw new BadRequestException('用户密码错误')
     return user

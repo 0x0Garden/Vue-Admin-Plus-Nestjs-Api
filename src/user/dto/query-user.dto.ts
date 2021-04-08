@@ -16,7 +16,7 @@ export class QueryUserDto {
   })
   @IsNotEmpty({ message: '当前页码不得为空' })
   @Type(() => Number)
-  readonly currentPage: number = 1
+  readonly currentPage?: number = 1
 
   @ApiProperty({
     required: false,
@@ -24,7 +24,7 @@ export class QueryUserDto {
   })
   @IsNotEmpty({ message: '每页条数不得为空' })
   @Type(() => Number)
-  readonly pageSize: number = 10
+  readonly pageSize?: number = 10
 
   @ApiProperty({
     required: false,

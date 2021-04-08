@@ -6,7 +6,19 @@
  * 创建作者：Jaxson
  */
 
-import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards, ForbiddenException } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  Query,
+  UseGuards,
+  ForbiddenException
+} from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger'
 
 import { UserService } from './user.service'
@@ -65,8 +77,15 @@ export class UserController {
   @ApiBody({ type: UpdateUserDto })
   @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
   @Put(':id')
-  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async putUpdateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.updateById(id, updateUserDto)
+  }
+
+  @ApiOperation({ summary: '用户局部更新' })
+  @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
+  @Patch(':id')
+  async patchUpdateUser(@Param('id') id: string, @Body() data) {
+    return await this.userService.updateById(id, data)
   }
 
   @ApiOperation({ summary: '根据多个用户编号删除用户' })
