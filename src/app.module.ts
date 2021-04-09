@@ -39,8 +39,8 @@ import { HttpExceptionFilter } from '@/shared/filters/http-exception.filter'
       inject: [ConfigService]
     }),
     AuthModule,
-    UserModule,
-    CaslModule
+    CaslModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [

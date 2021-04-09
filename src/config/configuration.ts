@@ -19,5 +19,6 @@ export default () => ({
   jwt: {
     expired: process.env.JWT_EXPIRED,
     secret: process.env.JWT_SECRET
-  }
+  },
+  logsDir: process.env.LOGS_DIR
 })
