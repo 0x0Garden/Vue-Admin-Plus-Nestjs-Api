@@ -28,6 +28,7 @@
     "@nestjs/jwt": "^7.2.0",
     "@nestjs/passport": "^7.1.5",
     "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/serve-static": "^2.1.4",
     "@nestjs/swagger": "^4.8.0",
     "@nestjs/typeorm": "^7.1.5",
     "bcrypt": "^5.0.1",
@@ -66,7 +67,7 @@
     "ts-loader": "^8.1.0",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.4"
   },
   "jest": {
     "moduleFileExtensions": [

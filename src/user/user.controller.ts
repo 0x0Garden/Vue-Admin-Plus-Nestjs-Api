@@ -84,8 +84,8 @@ export class UserController {
   @ApiOperation({ summary: '用户局部更新' })
   @ApiConsumes('application/x-www-form-urlencoded', 'application/json')
   @Patch(':id')
-  async patchUpdateUser(@Param('id') id: string, @Body() data) {
-    return await this.userService.updateById(id, data)
+  async patchUpdateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.updateById(id, updateUserDto)
   }
 
   @ApiOperation({ summary: '根据多个用户编号删除用户' })

@@ -5,9 +5,11 @@
  * 创建日期：2021年03月27日
  * 创建作者：Jaxson
  */
+import { join } from 'path'
 import { Module, ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ServeStaticModule } from '@nestjs/serve-static'
 import { APP_GUARD, APP_PIPE, APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core'
 
 import configuration from '@/config/configuration'
@@ -22,6 +24,10 @@ import { HttpExceptionFilter } from '@/shared/filters/http-exception.filter'
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/api*']
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],

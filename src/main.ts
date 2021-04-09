@@ -8,6 +8,7 @@
 import { NestFactory } from '@nestjs/core'
 import { Logger } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import { ConfigService } from '@nestjs/config'
 
 import { AppModule } from '@/app.module'
 
@@ -15,6 +16,8 @@ const logger = new Logger('bootstrap')
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  // 获取全局配置
+  const configService = app.get<ConfigService>(ConfigService)
 
   app.setGlobalPrefix('api')
   app.enableCors() // 启用允许跨域
@@ -28,10 +31,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('docs', app, document)
 
-  // todo 修改动态端口号
-  await app.listen(3000)
+  await app.listen(configService.get<number>('port'))
+
+  logger.log(`设置应用程序端口号：${configService.get<number>('port')}`)
+  logger.log(`应用程序接口地址： http://localhost:${configService.get<number>('port')}/api`)
+  logger.log(`应用程序文档地址： http://localhost:${configService.get<number>('port')}/docs`)
 }
 
-bootstrap().then(() => {
-  logger.log(`🚀 API Listening on Port ${3000}`)
-})
+bootstrap().then(() => logger.log('🚀 服务应用已经成功启动！'))

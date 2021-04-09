@@ -12,12 +12,12 @@ import { ConfigService } from '@nestjs/config'
 export const TypeOrmConfigModule = (configService: ConfigService): TypeOrmModuleOptions => {
   return {
     type: 'mysql',
-    host: configService.get('database.host'),
-    port: parseInt(configService.get('database.port'), 10),
-    username: configService.get('database.username'),
-    password: configService.get('database.password'),
-    database: configService.get('database.database'),
-    entityPrefix: configService.get('database.prefix'),
+    host: configService.get<string>('database.host'),
+    port: configService.get<number>('database.port'),
+    username: configService.get<string>('database.username'),
+    password: configService.get<string>('database.password'),
+    database: configService.get<string>('database.database'),
+    entityPrefix: configService.get<string>('database.prefix'),
     entities: ['dist/**/*.entity{.ts,.js}'],
     synchronize: process.env.NODE_ENV === 'development'
   }
