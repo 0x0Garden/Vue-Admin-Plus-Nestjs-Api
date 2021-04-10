@@ -6,10 +6,12 @@
  * 创建作者：Jaxson
  */
 
-import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common'
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Request } from 'express'
+
+import { LoggerService } from '@/logger/logger.service'
 
 interface Response<T> {
   data: T
@@ -21,11 +23,12 @@ interface HasTokenUserEntity extends Express.User {
 
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> {
+  constructor(private logger: LoggerService) {}
   intercept(context: ExecutionContext, next: CallHandler<T>): Observable<any> {
     const request = context.switchToHttp().getRequest<Request>()
     const user: HasTokenUserEntity = request.user
 
-    Logger.log(request.url, '正常接口请求')
+    this.logger.log(request.url, '正常接口请求')
 
     return next.handle().pipe(
       map(data => {

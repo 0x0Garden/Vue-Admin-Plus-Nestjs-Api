@@ -6,18 +6,20 @@
  * 创建作者：Jaxson
  */
 import { NestFactory } from '@nestjs/core'
-import { Logger } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { ConfigService } from '@nestjs/config'
 
 import { AppModule } from '@/app.module'
-
-const logger = new Logger('bootstrap')
+import { LoggerService } from '@/logger/logger.service'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   // 获取全局配置
   const configService = app.get<ConfigService>(ConfigService)
+
+  const logsDir = configService.get<string>('logsDir')
+  const logger = new LoggerService(logsDir)
+  app.useLogger(logger)
 
   app.setGlobalPrefix('api')
   app.enableCors() // 启用允许跨域
@@ -33,9 +35,10 @@ async function bootstrap() {
 
   await app.listen(configService.get<number>('port'))
 
-  logger.log(`设置应用程序端口号：${configService.get<number>('port')}`)
-  logger.log(`应用程序接口地址： http://localhost:${configService.get<number>('port')}/api`)
-  logger.log(`应用程序文档地址： http://localhost:${configService.get<number>('port')}/docs`)
+  logger.log(`设置应用程序端口号：${configService.get<number>('port')}`, 'bootstrap')
+  logger.log(`应用程序接口地址： http://localhost:${configService.get<number>('port')}/api`, 'bootstrap')
+  logger.log(`应用程序文档地址： http://localhost:${configService.get<number>('port')}/docs`, 'bootstrap')
+  logger.log('🚀 服务应用已经成功启动！', 'bootstrap')
 }
 
-bootstrap().then(() => logger.log('🚀 服务应用已经成功启动！'))
+bootstrap()

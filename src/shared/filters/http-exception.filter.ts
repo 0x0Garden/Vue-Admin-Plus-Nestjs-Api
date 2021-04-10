@@ -1,8 +1,11 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger } from '@nestjs/common'
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common'
 import { Response, Request } from 'express'
+
+import { LoggerService } from '@/logger/logger.service'
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
+  constructor(private logger: LoggerService) {}
   catch(exception: HttpException, host: ArgumentsHost) {
     const context = host.switchToHttp()
     const response = context.getResponse<Response>()
@@ -10,7 +13,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus()
     const message = exception.getResponse()['message']
 
-    Logger.log(`${request.url} - ${message}`, '非正常接口请求')
+    this.logger.log(`${request.url} - ${message}`, '非正常接口请求')
 
     response.status(status).json({
       statusCode: status,

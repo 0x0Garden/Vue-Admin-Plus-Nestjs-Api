@@ -18,6 +18,7 @@ import { AppController } from '@/app.controller'
 import { UserModule } from '@/user/user.module'
 import { CaslModule } from '@/casl/casl.module'
 import { AuthModule } from '@/auth/auth.module'
+import { LoggerModule } from '@/logger/logger.module'
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'
 import { TransformInterceptor } from '@/shared/interceptor/transform.interceptor'
 import { HttpExceptionFilter } from '@/shared/filters/http-exception.filter'
@@ -40,6 +41,7 @@ import { HttpExceptionFilter } from '@/shared/filters/http-exception.filter'
     }),
     AuthModule,
     CaslModule,
+    LoggerModule,
     UserModule
   ],
   controllers: [AppController],

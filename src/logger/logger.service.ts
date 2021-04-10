@@ -1,94 +1,57 @@
-import { LoggerService as AppLoggerService, Injectable, Logger as AppLogger } from '@nestjs/common'
-import { configure, getLogger, Logger } from 'log4js'
-import { ConfigService } from '@nestjs/config'
+import { Logger as AppLogger } from '@nestjs/common'
+import { Logger as log4jsLogger, configure, getLogger } from 'log4js'
 
-// 日志输出格式
-const layout = {
-  type: 'pattern',
-  pattern: '[%d{yyyy-MM-dd hh:mm:ss}] [%p] %h %z %m'
-}
+export class LoggerService extends AppLogger {
+  log4js: log4jsLogger
 
-@Injectable()
-export class LoggerService implements AppLoggerService {
-  private readonly logLogger: Logger
-  private readonly requestNormalLogger: Logger
-  private readonly requestErrorLogger: Logger
-
-  constructor(private readonly configService: ConfigService) {
-    // 创建logger 参数指的是categories
-    this.logLogger = getLogger('system')
-    this.requestNormalLogger = getLogger('requestNormal')
-    this.requestErrorLogger = getLogger('requestError')
-
-    const logsDir = this.configService.get<string>('logsDir')
+  constructor(logsDir: string) {
+    super()
 
     configure({
       appenders: {
-        console: {
-          type: 'console'
-        },
-        stdout: {
+        all: {
+          filename: `${logsDir}/nestjs.services.log`,
           type: 'dateFile',
-          filename: `${logsDir}/request.log`,
-          alwaysIncludePattern: true,
+          // 配置 layout，此处使用自定义模式 pattern
+          layout: { type: 'pattern', pattern: '%d [%p] %m' },
+          // 日志文件按日期（天）切割
+          pattern: 'yyyy-MM-dd',
+          // 回滚旧的日志文件时，保证以 .log 结尾 （只有在 alwaysIncludePattern 为 false 生效）
           keepFileExt: true,
-          layout
-        },
-        errorout: {
-          type: 'dateFile',
-          filename: `${logsDir}/error.log`,
+          // 输出的日志文件名是都始终包含 pattern 日期结尾
           alwaysIncludePattern: true,
-          keepFileExt: true,
-          layout
+          // 指定日志保留的天数
+          daysToKeep: 10
         }
       },
-      categories: {
-        default: { appenders: ['console'], level: 'all' },
-        request: { appenders: ['stdout'], level: 'info' },
-        error: { appenders: ['errorout'], level: 'error' }
-      }
+      categories: { default: { appenders: ['all'], level: 'all' } }
     })
+
+    this.log4js = getLogger()
   }
 
-  log(message: any): void {
-    const logger = new AppLogger('正常日志')
-    logger.log(message)
-    this.logLogger.log(message)
+  log(message: any, trace: string) {
+    super.log(message, trace)
+    this.log4js.info(trace, message)
   }
 
-  error(message: any): void {
-    const logger = new AppLogger('错误日志')
-    logger.error(message)
-    this.logLogger.error(message)
+  error(message: any, trace: string) {
+    super.error(message, trace)
+    this.log4js.error(trace, message)
   }
 
-  warn(message: any): void {
-    const logger = new AppLogger('警告日志')
-    logger.warn(message)
-    this.logLogger.warn(message)
+  warn(message: any, trace: string) {
+    super.warn(message, trace)
+    this.log4js.warn(trace, message)
   }
 
-  debug(message: any): void {
-    const logger = new AppLogger('调试日志')
-    logger.debug(message)
-    this.logLogger.debug(message)
+  debug(message: any, trace: string) {
+    super.debug(message, trace)
+    this.log4js.debug(trace, message)
   }
 
-  verbose(message: any): void {
-    const logger = new AppLogger('详细日志')
-    logger.verbose(message)
-    this.logLogger.info(message)
-  }
-
-  requestNormal(message: any): void {
-    const logger = new AppLogger('请求接口成功日志')
-    logger.log(message)
-    this.requestNormalLogger.log(message)
-  }
-
-  requestError(message: any): void {
-    const logger = new AppLogger('请求接口失败日志')
-    logger.error(message)
-    this.requestErrorLogger.error(message)
+  verbose(message: any, trace: string) {
+    super.verbose(message, trace)
+    this.log4js.info(trace, message)
   }
 }
