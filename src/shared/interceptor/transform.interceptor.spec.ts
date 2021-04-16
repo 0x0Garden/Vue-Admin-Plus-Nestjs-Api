@@ -1,7 +1,9 @@
 import { TransformInterceptor } from './transform.interceptor'
+import { LoggerService } from '@/logger/logger.service'
 
 describe('TransformInterceptor', () => {
   it('should be defined', () => {
-    expect(new TransformInterceptor()).toBeDefined()
+    const logger = new LoggerService('logs')
+    expect(new TransformInterceptor(logger)).toBeDefined()
   })
 })

@@ -6,7 +6,8 @@
  * 创建作者：Jaxson
  */
 
-import { Controller, Post, Body, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger'
 
 import { LocalAuthGuard } from '@/auth/guards/local-auth.guard'
@@ -18,7 +19,21 @@ import { UserData } from '@/user/user.interface'
 @ApiTags('全局')
 @Controller()
 export class AppController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly configService: ConfigService) {}
+
+  @Public()
+  @Get('')
+  hello() {
+    return {
+      data: 'Hello World',
+      Api: `http://localhost:${this.configService.get<number>('port')}/api`,
+      Docs: `http://localhost:${this.configService.get<number>('port')}/docs`,
+      ProjectGithub: 'https://github.com/0x0Garden/Vue-Admin-Plus-Nestjs-Api',
+      MyGithub: 'https://github.com/JaxsonWang',
+      MyBlog: 'https://iiong.com',
+      MyEmail: 'i@iiong.com'
+    }
+  }
 
   /**
    * 登录接口

@@ -18,7 +18,7 @@ export const TypeOrmConfigModule = (configService: ConfigService): TypeOrmModule
     password: configService.get<string>('database.password'),
     database: configService.get<string>('database.database'),
     entityPrefix: configService.get<string>('database.prefix'),
-    entities: ['dist/**/*.entity{.ts,.js}'],
+    entities: configService.get('nodeEnv') === 'test' ? ['src/**/*.entity{.ts,.js}'] : ['dist/**/*.entity{.ts,.js}'],
     synchronize: process.env.NODE_ENV === 'development'
   }
 }

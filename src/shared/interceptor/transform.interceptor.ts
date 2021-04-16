@@ -34,7 +34,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
       map(data => {
         const result = data
         // 判断接口是否更新 Token
-        if (user.token) result['token'] = user.token
+        if (user && user.token) result['token'] = user.token
         return {
           data: result,
           statusCode: 200,

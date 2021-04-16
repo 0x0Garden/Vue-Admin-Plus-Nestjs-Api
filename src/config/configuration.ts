@@ -7,6 +7,7 @@
  */
 
 export default () => ({
+  nodeEnv: process.env.NODE_ENV,
   port: parseInt(process.env.NESTJS_PORT, 10) || 3000,
   database: {
     host: process.env.DATABASE_HOST,
@@ -20,5 +21,5 @@ export default () => ({
     expired: process.env.JWT_EXPIRED,
     secret: process.env.JWT_SECRET
   },
-  logsDir: process.env.LOGS_DIR
+  logsDir: process.env.LOGS_DIR || 'logs'
 })

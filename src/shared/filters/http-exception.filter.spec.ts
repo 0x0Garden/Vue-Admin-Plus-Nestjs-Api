@@ -1,7 +1,9 @@
 import { HttpExceptionFilter } from './http-exception.filter'
+import { LoggerService } from '@/logger/logger.service'
 
 describe('HttpExceptionFilter', () => {
   it('should be defined', () => {
-    expect(new HttpExceptionFilter()).toBeDefined()
+    const logger = new LoggerService('logs')
+    expect(new HttpExceptionFilter(logger)).toBeDefined()
   })
 })
