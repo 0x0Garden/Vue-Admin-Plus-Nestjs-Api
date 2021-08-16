@@ -55,7 +55,7 @@ export class UserEntity extends BaseEntity {
   role: Role
 
   @Column({
-    default: true,
+    type: 'boolean',
     comment: '用户状态'
   })
   isActive: boolean

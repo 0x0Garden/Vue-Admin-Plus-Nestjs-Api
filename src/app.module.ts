@@ -53,7 +53,8 @@ import { HttpExceptionFilter } from '@/shared/filters/http-exception.filter'
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({
-        transform: true
+        transform: true,
+        whitelist: true
       })
     },
     {

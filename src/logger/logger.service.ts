@@ -1,4 +1,4 @@
-import { Logger as AppLogger } from '@nestjs/common'
+import { ConsoleLogger as AppLogger } from '@nestjs/common'
 import { Logger as log4jsLogger, configure, getLogger } from 'log4js'
 
 export class LoggerService extends AppLogger {

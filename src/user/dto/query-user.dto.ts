@@ -38,10 +38,9 @@ export class QueryUserDto {
     required: false,
     description: '用户状态'
   })
-  @Type(() => Boolean)
-  @IsBoolean({ message: '用户状态类型为布尔值' })
+  @Type(() => String)
   @ValidateIf(o => o.isActive)
-  readonly isActive?: boolean
+  readonly isActive?: string
 
   @ApiProperty({
     required: false,

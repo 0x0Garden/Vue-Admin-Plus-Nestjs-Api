@@ -66,7 +66,7 @@ export class UserService {
 
     const queryBuilder = await this.userRepository.createQueryBuilder('user')
     if (username) queryBuilder.where('user.username like :username', { username: `${username}%` })
-    if (isActive) queryBuilder.andWhere('user.isActive = :isActive', { isActive })
+    if (isActive) queryBuilder.andWhere('user.isActive = :isActive', { isActive: isActive === 'true' })
     queryBuilder.orderBy('created_time', order).skip(skippedItems).take(pageSize)
 
     const totalCount: number = await queryBuilder.getCount()
