@@ -37,8 +37,8 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
         if (user && user.token) result['token'] = user.token
         return {
           data: result,
-          statusCode: 200,
-          message: '请求成功'
+          code: 200,
+          msg: '请求成功'
         }
       })
     )
