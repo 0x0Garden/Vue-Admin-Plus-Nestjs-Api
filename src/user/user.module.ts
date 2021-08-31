@@ -9,7 +9,6 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { CaslAbilityFactory } from '@/casl/casl-ability.factory'
 import { BcryptService } from '@/shared/services/bcrypt.service'
 import { UserController } from './user.controller'
 import { UserService } from './user.service'
@@ -18,7 +17,7 @@ import { UserEntity } from '@/user/entities/user.entity'
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [UserController],
-  providers: [UserService, BcryptService, CaslAbilityFactory],
+  providers: [UserService, BcryptService],
   exports: [UserService]
 })
 export class UserModule {}

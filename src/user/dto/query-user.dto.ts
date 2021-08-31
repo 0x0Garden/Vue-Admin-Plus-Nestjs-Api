@@ -6,7 +6,7 @@
  * 创建作者：Jaxson
  */
 import { ApiProperty } from '@nestjs/swagger'
-import { ValidateIf, IsNotEmpty, IsBoolean } from 'class-validator'
+import { ValidateIf, IsNotEmpty } from 'class-validator'
 import { Type } from 'class-transformer'
 
 export class QueryUserDto {

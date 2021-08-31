@@ -16,7 +16,6 @@ import configuration from '@/config/configuration'
 import { TypeOrmConfigModule } from '@/config/typeorm.config'
 import { AppController } from '@/app.controller'
 import { UserModule } from '@/user/user.module'
-import { CaslModule } from '@/casl/casl.module'
 import { AuthModule } from '@/auth/auth.module'
 import { LoggerModule } from '@/logger/logger.module'
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard'
@@ -40,7 +39,6 @@ import { HttpExceptionFilter } from '@/shared/filters/http-exception.filter'
       inject: [ConfigService]
     }),
     AuthModule,
-    CaslModule,
     LoggerModule,
     UserModule
   ],
